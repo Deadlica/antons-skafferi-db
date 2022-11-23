@@ -1,0 +1,43 @@
+package rest.web;
+
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import rest.entities.Employee;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+@Path("/employee")
+public class EmployeeResource {
+    @Inject
+    EmployeeBean employeeBean;
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Employee> getAllEmployee(@QueryParam("id") String id) {
+        if(id == null) {
+            return employeeBean.getAllEmployees();
+        }
+        return employeeBean.getEmployee(id);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("available")
+    public List<Employee> getAvailableEmployess(@QueryParam("date") String date) {
+        if(date == null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date today = new Date();
+            return employeeBean.getAvailableEmployees(simpleDateFormat.format(today));
+        }
+        return employeeBean.getAvailableEmployees(date);
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Employee insertEmployee(Employee employee) {
+        return employeeBean.insertEmployee(employee);
+    }
+}

@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="antons-skafferi-db:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>antons-skafferi-db</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="antons-skafferi-db-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="antons-skafferi-db:war exploded" />
+    </root>
+  </artifact>
+</component>
