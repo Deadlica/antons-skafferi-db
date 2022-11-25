@@ -1,6 +1,9 @@
 package rest.web;
 
 import jakarta.inject.Inject;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import rest.entities.Employee;
@@ -20,6 +23,7 @@ public class EmployeeResource {
         if(id == null) {
             return employeeBean.getAllEmployees();
         }
+
         return employeeBean.getEmployee(id);
     }
 

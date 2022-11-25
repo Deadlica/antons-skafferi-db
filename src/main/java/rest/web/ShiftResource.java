@@ -1,16 +1,12 @@
 package rest.web;
 
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Variant;
 import rest.entities.Shift;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 @Path("/shift")
 public class ShiftResource {
@@ -19,7 +15,10 @@ public class ShiftResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Shift> getAllShift(@QueryParam("employeeId") String employeeId, @QueryParam("shiftId") Integer shiftId) {
+    public List<Shift> getAllShift(@QueryParam("employeeId") String employeeId, @QueryParam("shiftId") Integer shiftId, @QueryParam("date") String date) {
+        if(date != null && employeeId == null && shiftId == null) {
+            return shiftBean.getShift(date);
+        }
         if(employeeId == null && shiftId == null) { //All shifts
             return shiftBean.getAllShifts();
         }
@@ -31,5 +30,31 @@ public class ShiftResource {
         }
 
         return shiftBean.getShift(shiftId, employeeId);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("upcoming-shifts")
+    public List<Shift> getUpcomingShifts(@QueryParam("id") String id, @QueryParam("date") String date) {
+        if(id != null && date != null) {
+            return shiftBean.getUpcomingShifts(id, date);
+        }
+        return null;
+    }
+
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("change-employee")
+    public Shift changeShiftEmployee(@Valid ShiftUpdateEmployee shiftUpdateEmployee, @HeaderParam("shiftId") String id) {
+
+        return shiftBean.changeShiftEmployee((long) shiftUpdateEmployee.getId(), shiftUpdateEmployee.getSsn());
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Shift insertShift(Shift shift) {
+        return shiftBean.insertShift(shift);
     }
 }

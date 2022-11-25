@@ -30,20 +30,19 @@ public class EmployeeBean {
     }
 
     public List<Employee> getAvailableEmployees(String date) {
-        TypedQuery<Employee> employeesWorkingQuery = em.createQuery("SELECT s.employee.ssn FROM Shift s WHERE s.date = :date", Employee.class);
-        employeesWorkingQuery.setParameter("date", date);
-        List<Employee> employeesWorking = employeesWorkingQuery.getResultList();
+        TypedQuery<Employee> workingEmployeesSsn = em.createQuery("SELECT s.employee.ssn FROM Shift s WHERE s.date = :date", Employee.class);
+        workingEmployeesSsn.setParameter("date", date);
+        List<Employee> employeesWorking = workingEmployeesSsn.getResultList();
         List<Employee> employeesNotWorking;
 
         String stringQuery = buildAvailableEmployeesQueryString(employeesWorking);
         TypedQuery<Employee> availableEmployeesQuery = em.createQuery(stringQuery, Employee.class);
 
         for(int index = 0; index < employeesWorking.size(); index++) {
-            availableEmployeesQuery.setParameter("ssn" + Integer.toString(index), employeesWorking.get(index).getSsn());
+            availableEmployeesQuery.setParameter("ssn" + index, employeesWorking.get(index));
         }
 
-
-        return employeesWorking;//availableEmployeesQuery.getResultList();
+        return availableEmployeesQuery.getResultList();
     }
 
     public Employee insertEmployee(Employee employee) {
@@ -59,7 +58,7 @@ public class EmployeeBean {
             availableEmployeesQuery.append(" WHERE ");
         }
         for(int index = 0; index < employeesWorking.size(); index++) {
-            String ssnPlaceholder = "ssn" + Integer.toString(index);
+            String ssnPlaceholder = "ssn" + index;
             if(index < employeesWorking.size() - 1) {
                 availableEmployeesQuery.append("e.ssn <> :" + ssnPlaceholder + " AND ");
             }

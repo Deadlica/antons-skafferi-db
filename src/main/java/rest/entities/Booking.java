@@ -12,6 +12,9 @@ public class Booking implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @Column(name = "phoneNumber", nullable = false)
+    private String phoneNumber;
+
     @Column(name = "firstName", nullable = false)
     private String firstName;
 
@@ -36,6 +39,14 @@ public class Booking implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getFirstName() {

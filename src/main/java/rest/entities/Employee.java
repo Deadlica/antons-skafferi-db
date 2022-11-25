@@ -19,7 +19,7 @@ public class Employee implements Serializable {
     @Column(name = "email", nullable = false)
     private String email;
     @Column(name = "phoneNumber", nullable = false)
-    private Long phoneNumber;
+    private String phoneNumber;
     public String getSsn() {
         return ssn;
     }
@@ -44,10 +44,10 @@ public class Employee implements Serializable {
     public void setEmail(String email) {
         this.email = email;
     }
-    public Long getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
-    public void setPhoneNumber(Long phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 }

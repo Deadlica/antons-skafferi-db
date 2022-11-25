@@ -13,6 +13,9 @@ public class BookingEntity {
     @Column(name = "ID")
     private int id;
     @Basic
+    @Column(name = "PHONENUMBER")
+    private String phonenumber;
+    @Basic
     @Column(name = "FIRSTNAME")
     private String firstname;
     @Basic
@@ -37,6 +40,14 @@ public class BookingEntity {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
     }
 
     public String getFirstname() {
@@ -97,6 +108,7 @@ public class BookingEntity {
         if (id != that.id) return false;
         if (numberofpeople != that.numberofpeople) return false;
         if (tablenumber != that.tablenumber) return false;
+        if (phonenumber != null ? !phonenumber.equals(that.phonenumber) : that.phonenumber != null) return false;
         if (firstname != null ? !firstname.equals(that.firstname) : that.firstname != null) return false;
         if (lastname != null ? !lastname.equals(that.lastname) : that.lastname != null) return false;
         if (date != null ? !date.equals(that.date) : that.date != null) return false;
@@ -108,6 +120,7 @@ public class BookingEntity {
     @Override
     public int hashCode() {
         int result = id;
+        result = 31 * result + (phonenumber != null ? phonenumber.hashCode() : 0);
         result = 31 * result + (firstname != null ? firstname.hashCode() : 0);
         result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
         result = 31 * result + numberofpeople;
