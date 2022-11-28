@@ -1,9 +1,12 @@
 package rest.web;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaUpdate;
+import jakarta.persistence.criteria.Expression;
 import jakarta.transaction.Transactional;
 import rest.entities.Employee;
 import rest.entities.Request;
@@ -55,15 +58,11 @@ public class ShiftBean {
     }
 
     public Shift changeShiftEmployee(Long shiftId, String employeeId) {
-        TypedQuery<Shift> query = em.createQuery("UPDATE Shift s SET s.employee.ssn = :ssn WHERE s.id = :shiftId", Shift.class);
-        query.setParameter("ssn", employeeId);
-        query.setParameter("shiftId", shiftId);
+        Shift shift = em.find(Shift.class, shiftId);
+        Employee employee = em.find(Employee.class, employeeId);
+        shift.setEmployee(employee);
 
-        TypedQuery<Request> deleteRemainingRequestsOfShift = em.createQuery("DELETE FROM Request r WHERE r.shift.id = :shiftId", Request.class);
-        deleteRemainingRequestsOfShift.setParameter("shiftId", shiftId);
-        deleteRemainingRequestsOfShift.getResultList();
-
-        return query.getSingleResult();
+        return shift;
     }
 
     public Shift insertShift(Shift shift) {

@@ -1,6 +1,7 @@
 package rest.web;
 
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -47,14 +48,36 @@ public class ShiftResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("change-employee")
-    public Shift changeShiftEmployee(@Valid ShiftUpdateEmployee shiftUpdateEmployee, @HeaderParam("shiftId") String id) {
-
-        return shiftBean.changeShiftEmployee((long) shiftUpdateEmployee.getId(), shiftUpdateEmployee.getSsn());
+    public String changeShiftEmployee(ShiftUpdateEmployee shiftUpdateEmployee) {
+        Shift shift = shiftBean.changeShiftEmployee((long) shiftUpdateEmployee.getId(), shiftUpdateEmployee.getSsn());
+        RequestBean requestBean = new RequestBean();
+        return requestBean.deleteRequest((long) shiftUpdateEmployee.getId());
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Shift insertShift(Shift shift) {
         return shiftBean.insertShift(shift);
+    }
+
+    public static class ShiftUpdateEmployee {
+        private int id;
+        private String ssn;
+
+        public String getSsn() {
+            return ssn;
+        }
+
+        public void setSsn(String ssn) {
+            this.ssn = ssn;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
     }
 }

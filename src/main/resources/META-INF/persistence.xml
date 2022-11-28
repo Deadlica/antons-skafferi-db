@@ -12,7 +12,7 @@
         <class>db.DishEntity</class>
         <class>db.EventEntity</class>
         <class>db.LunchEntity</class>
-        <class>db.OrderEntity</class>
+        <class>db.OrdersEntity</class>
         <class>db.ReviewEntity</class>
         <class>db.RequestEntity</class>
 

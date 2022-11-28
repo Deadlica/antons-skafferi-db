@@ -15,7 +15,7 @@ public class DishBean {
     EntityManager em;
 
     public List<Dish> getAllDishes() {
-        return em.createQuery("SELECT d FROM Dish d", Dish.class).getResultList();
+        return em.createQuery("SELECT d FROM Dish d ORDER BY d.name", Dish.class).getResultList();
     }
 
     public Dish insertDish(Dish dish) {

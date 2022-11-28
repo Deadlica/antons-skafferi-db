@@ -3,18 +3,18 @@ package rest.web;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import rest.entities.Order;
+import rest.entities.Orders;
 
 import java.util.List;
 
-@Path("/order")
-public class OrderResource {
+@Path("/orders")
+public class OrdersResource {
     @Inject
-    OrderBean orderBean;
+    OrdersBean ordersBean;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Order> getALlOrders() {
-        return orderBean.getAllOrders();
+    public List<Orders> getALlOrders() {
+        return ordersBean.getAllOrders();
     }
 }

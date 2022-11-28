@@ -4,17 +4,17 @@ import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
-import rest.entities.Order;
+import rest.entities.Orders;
 
 import java.util.List;
 
 @Named
 @Transactional
-public class OrderBean {
+public class OrdersBean {
     @PersistenceContext(unitName = "default")
     EntityManager em;
 
-    public List<Order> getAllOrders() {
-        return em.createQuery("SELECT o FROM Order o", Order.class).getResultList();
+    public List<Orders> getAllOrders() {
+        return em.createQuery("SELECT o FROM Orders o", Orders.class).getResultList();
     }
 }

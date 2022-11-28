@@ -14,7 +14,6 @@ public class RequestEntityPK implements Serializable {
     private int shiftid;
     @Column(name = "TOID")
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String toid;
 
     public int getShiftid() {

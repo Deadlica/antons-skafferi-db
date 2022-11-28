@@ -1,13 +1,12 @@
 package rest.entities;
 
-import jakarta.inject.Named;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
 
 @Entity
-@Table(name = "ORDER")
-public class Order implements Serializable {
+@Table(name = "ORDERS")
+public class Orders implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

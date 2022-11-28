@@ -27,7 +27,7 @@ public class BookingResource {
         return bookingBean.getBooking(date, phoneNumber);
     }
 
-    @POST
+    @DELETE
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("remove")
     public Booking removeBooking(Booking booking) {
