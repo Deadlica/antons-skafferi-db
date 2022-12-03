@@ -25,5 +25,20 @@ public class DishResource {
         return dishBean.insertDish(dish);
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteDish(Dish dish) {
+        dishBean.deleteDish(dish.getId());
+        return "ok";
+    }
+    @DELETE
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String extraDeleteFunction(@QueryParam("id") int id) {
+        dishBean.deleteDish(id);
+        return "ok";
+    }
+
 
 }

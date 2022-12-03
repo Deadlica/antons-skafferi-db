@@ -23,4 +23,13 @@ public class ReviewResource {
     public Review insertReview(Review review) {
         return reviewBean.insertReview(review);
     }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteReview(Review review) {
+        reviewBean.deleteReview(review);
+        return "ok";
+    }
+
 }

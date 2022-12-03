@@ -6,6 +6,7 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "LUNCH", schema = "APP", catalog = "")
+@IdClass(LunchEntityPK.class)
 public class LunchEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -14,7 +15,7 @@ public class LunchEntity {
     @Basic
     @Column(name = "PRICE")
     private int price;
-    @Basic
+    @Id
     @Column(name = "DATE")
     private Date date;
     @Basic

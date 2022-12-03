@@ -8,6 +8,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import rest.entities.Employee;
 
+import javax.print.attribute.standard.Media;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -43,5 +44,13 @@ public class EmployeeResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Employee insertEmployee(Employee employee) {
         return employeeBean.insertEmployee(employee);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteEmployee(Employee employee) {
+        employeeBean.deleteEmployee(employee);
+        return "ok";
     }
 }

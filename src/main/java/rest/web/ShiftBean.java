@@ -14,6 +14,7 @@ import rest.entities.Shift;
 
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Named
 @Transactional
@@ -50,6 +51,33 @@ public class ShiftBean {
         return query.getResultList();
     }
 
+    public List<Shift> getAllLunchShifts() {
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.beginTime = :beginTime", Shift.class);
+        query.setParameter("beginTime", "11:00:00");
+        return query.getResultList();
+    }
+
+    public List<Shift> getLunchShifts(String date) {
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.date = :date AND s.beginTime = :beginTime", Shift.class);
+        query.setParameter("date", date);
+        query.setParameter("beginTime", "11:00:00");
+        return query.getResultList();
+    }
+
+    public List<Shift> getAllDinnerShifts() {
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.beginTime <> :beginTime", Shift.class);
+        query.setParameter("beginTime", "11:00:00");
+        return query.getResultList();
+    }
+
+    public List<Shift> getDinnerShifts(String date) {
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.date = :date AND s.beginTime <> :beginTime", Shift.class);
+        query.setParameter("date", date);
+        query.setParameter("beginTime", "11:00:00");
+        return query.getResultList();
+
+    }
+
     public List<Shift> getUpcomingShifts(String id, String date) {
         TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.employee.ssn = :id AND s.date >= :date ORDER BY s.date", Shift.class);
         query.setParameter("id", id);
@@ -62,11 +90,37 @@ public class ShiftBean {
         Employee employee = em.find(Employee.class, employeeId);
         shift.setEmployee(employee);
 
+        String date = shift.getDate();
+        TypedQuery<Request> query = em.createQuery("SELECT r FROM Request r WHERE r.shift.date = :date AND r.toEmployee.ssn = :ssn", Request.class);
+        query.setParameter("date", date);
+        query.setParameter("ssn", employeeId);
+
+        List<Request> excessRequests = query.getResultList();
+        for(Request r: excessRequests) {
+            em.remove(r);
+        }
+
         return shift;
     }
 
     public Shift insertShift(Shift shift) {
         em.persist(shift);
         return shift;
+    }
+
+    public void deleteShift(Shift shift) {
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.id = :id", Shift.class);
+        query.setParameter("id", shift.getId());
+        em.remove(query.getSingleResult());
+    }
+
+    public void deleteAllShiftsOfEmployee(Employee employee) {
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.employee.ssn = :ssn", Shift.class);
+        query.setParameter("ssn", employee.getSsn());
+        List<Shift> shiftsToBeDeleted = query.getResultList();
+
+        for(Shift s: shiftsToBeDeleted) {
+            em.remove(s);
+        }
     }
 }

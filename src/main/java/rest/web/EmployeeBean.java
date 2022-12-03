@@ -1,5 +1,7 @@
 package rest.web;
 
+import jakarta.enterprise.inject.Typed;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -8,6 +10,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import jakarta.validation.constraints.Max;
 import rest.entities.Employee;
+import rest.entities.Request;
 import rest.entities.Shift;
 
 import java.util.ArrayList;
@@ -50,7 +53,17 @@ public class EmployeeBean {
         return employee;
     }
 
-
+    @Inject
+    ShiftBean shiftBean;
+    @Inject
+    RequestBean requestBean;
+    public void deleteEmployee(Employee employee) {
+        requestBean.deleteRequestsOfEmployee(employee);
+        shiftBean.deleteAllShiftsOfEmployee(employee);
+        TypedQuery<Employee> query = em.createQuery("SELECT e FROM Employee e WHERE e.ssn = :ssn", Employee.class);
+        query.setParameter("ssn", employee.getSsn());
+        em.remove(query.getSingleResult());
+    }
 
     private String buildAvailableEmployeesQueryString(List<Employee> employeesWorking) {
         StringBuilder availableEmployeesQuery = new StringBuilder("SELECT e FROM Employee e");

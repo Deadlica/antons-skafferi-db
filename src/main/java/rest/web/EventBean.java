@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import rest.entities.Event;
 
@@ -22,5 +23,11 @@ public class EventBean {
     public Event insertEvent(Event event) {
         em.persist(event);
         return event;
+    }
+
+    public void deleteEvent(Event event) {
+        TypedQuery<Event> query = em.createQuery("SELECT e FROM Event e WHERE e.id = :id", Event.class);
+        query.setParameter("id", event.getId());
+        em.remove(query.getSingleResult());
     }
 }

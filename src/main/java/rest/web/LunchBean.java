@@ -17,7 +17,7 @@ public class LunchBean {
     EntityManager em;
 
     public List<Lunch> getAllLunch() {
-        return em.createQuery("SELECT l FROM Lunch l JOIN FETCH l.dish", Lunch.class).getResultList();
+        return em.createQuery("SELECT l FROM Lunch l JOIN FETCH l.dish ORDER BY l.date", Lunch.class).getResultList();
     }
 
     public List<Lunch> getLunchOfDate(String date) {

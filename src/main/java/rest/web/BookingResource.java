@@ -1,10 +1,12 @@
 package rest.web;
 
 import jakarta.inject.Inject;
+import jakarta.json.JsonObject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import rest.entities.Booking;
 
+import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @Path("/booking")
@@ -27,8 +29,17 @@ public class BookingResource {
         return bookingBean.getBooking(date, phoneNumber);
     }
 
-    @DELETE
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("count")
+    public String countBookingsOfDate(@QueryParam("date") String date) {
+        int size = bookingBean.getBookingOfDate(date).size();
+        return "{\"size\":" + size + "}";
+    }
+
+    @PUT
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("remove")
     public Booking removeBooking(Booking booking) {
         return bookingBean.removeBooking(booking);
@@ -36,7 +47,9 @@ public class BookingResource {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Booking insertBooking(Booking booking) {
         return bookingBean.insertBooking(booking);
     }
+
 }

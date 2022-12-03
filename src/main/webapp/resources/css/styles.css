@@ -1,0 +1,81 @@
+body {
+}
+
+.entity {
+    display: none;
+}
+
+.param {
+    padding-left: 40px;
+}
+
+.vl {
+    border-left: 3px solid black;
+    height: auto;
+    margin: 0px 20px;
+}
+
+.card_content {
+    margin-left: 50px;
+    text-align: left;
+    display: flex;
+    justify-content: center;
+}
+
+.http_request p{
+    margin: 0px;
+}
+
+.get {
+    display: flex;
+    justify-content: flex-start;
+    left: auto;
+    margin: 20px auto;
+    width: 40%;
+    border-radius: 5px;
+    text-align: center;
+    background: lightgreen;
+    word-wrap: break-word;
+    padding: 10px;
+}
+
+.post {
+    margin: 20px auto;
+    width: 70%;
+    text-align: center;
+    background: lightskyblue;
+    word-wrap: break-word;
+    padding: 10px;
+}
+
+.put {
+    margin: 20px auto;
+    width: 70%;
+    text-align: center;
+    background: indianred;
+    word-wrap: break-word;
+    padding: 10px;
+}
+
+.get a:visited, post a:visited, put a:visited {
+    color: blue;
+}
+
+.nav_bar ul {
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    padding-right: 40px;
+}
+
+.nav_bar ul li {
+    transition-duration: 0.2s;
+    cursor: pointer;
+    opacity: 0.6;
+}
+
+@media only screen and (max-width: 600px) {
+    body {
+            background-color: lightblue;
+    }
+}

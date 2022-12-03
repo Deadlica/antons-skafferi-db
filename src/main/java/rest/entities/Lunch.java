@@ -15,6 +15,7 @@ public class Lunch implements Serializable {
     @Column(name = "price", nullable = false)
     private Long price;
 
+    @Id
     @Column(name = "date", nullable = false)
     private String date;
 

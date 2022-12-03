@@ -35,6 +35,26 @@ public class ShiftResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("lunch")
+    public List<Shift> getLunchShifts(@QueryParam("date") String date) {
+        if(date == null) {
+            return shiftBean.getAllLunchShifts();
+        }
+        return shiftBean.getLunchShifts(date);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("dinner")
+    public List<Shift> getDinnerShifts(@QueryParam("date") String date) {
+        if(date == null) {
+            return shiftBean.getAllDinnerShifts();
+        }
+        return shiftBean.getDinnerShifts(date);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("upcoming-shifts")
     public List<Shift> getUpcomingShifts(@QueryParam("id") String id, @QueryParam("date") String date) {
         if(id != null && date != null) {
@@ -43,21 +63,29 @@ public class ShiftResource {
         return null;
     }
 
-
+    @Inject
+    RequestBean requestBean;
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("change-employee")
-    public String changeShiftEmployee(ShiftUpdateEmployee shiftUpdateEmployee) {
+    public void changeShiftEmployee(ShiftUpdateEmployee shiftUpdateEmployee) {
         Shift shift = shiftBean.changeShiftEmployee((long) shiftUpdateEmployee.getId(), shiftUpdateEmployee.getSsn());
-        RequestBean requestBean = new RequestBean();
-        return requestBean.deleteRequest((long) shiftUpdateEmployee.getId());
+        requestBean.deleteRequests((long) shiftUpdateEmployee.getId());
     }
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Shift insertShift(Shift shift) {
         return shiftBean.insertShift(shift);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteShift(Shift shift) {
+        shiftBean.deleteShift(shift);
+        return "ok";
     }
 
     public static class ShiftUpdateEmployee {

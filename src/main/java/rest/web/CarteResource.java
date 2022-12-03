@@ -25,4 +25,24 @@ public class CarteResource {
     public Carte insertCarte(Carte carte) {
         return carteBean.insertCarte(carte);
     }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteCarte(dishIdPlacerholder dishIdPlacerholder) {
+        carteBean.deleteCarte(dishIdPlacerholder.getId());
+        return "ok";
+    }
+
+    public static class dishIdPlacerholder {
+        private int id;
+
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+    }
 }

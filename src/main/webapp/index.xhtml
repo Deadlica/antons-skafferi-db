@@ -5,7 +5,159 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+    <h:outputStylesheet library="css" name="styles.css"/>
+    <h:outputScript library="js" name="navigation.js"/>
+</h:head>
+
 <f:view>
-    <h:outputLabel value="Hello, world"/>
+    <div class="nav_bar">
+        <ul id="entity_list">
+            <li id="employee_btn">Employee</li>
+            <li id="shift_btn">Shift</li>
+            <li id="request_btn">Request</li>
+            <li id="orders_btn">Orders</li>
+            <li id="booking_btn">Booking</li>
+            <li id="dish_btn">Dish</li>
+            <li id="carte_btn">Carte</li>
+            <li id="lunch_btn">Lunch</li>
+            <li id="event_btn">Event</li>
+            <li id="review_btn">Review</li>
+        </ul>
+    </div>
+    <hr/>
+
+    <div class="all_entities">
+        <div class="entity" id="employee">
+                <div class="get">
+                    <div class="http_request">
+                        <p><b>HTTP Request</b></p>
+                        <h1>GET</h1>
+                    </div>
+                    <div class="vl" />
+                    <div class="card_content">
+                        <p><a href="api/employee">api/employee</a></p>
+                        <p><b>HTTP Request:</b> GET</p>
+                        <p><b>Returns:</b> all employees</p>
+                    </div>
+                </div>
+
+            <div class="get">
+                <p><a href="api/employee?id=">api/employee?id=</a></p>
+                <p><b>HTTP Request:</b> GET</p>
+                <p><b>Parameters:</b></p>
+                <p class="param"><b>@id:</b> 12 digit social security number (ssn) of a registered employee.</p>
+                <p><b>Returns:</b> the employee matching the ssn.</p>
+            </div>
+
+            <div class="get">
+                <p><a href="api/employee/available">api/employee/available</a></p>
+                <p><b>HTTP Request:</b> GET</p>
+                <p><b>Returns:</b> all employees who are not working today.</p>
+            </div>
+
+            <div class="get">
+                <p><a href="api/employee/available?date=">api/employee/available?date=</a></p>
+                <p><b>HTTP Request:</b> GET</p>
+                <p><b>Parameters:</b></p>
+                <p class="param"><b>@date:</b> a given date following the format YYYY-MM-DD.</p>
+                <p><b>Returns:</b> all employees who are not working the specified date.</p>
+            </div>
+
+            <div class="post">
+                <p><a href="api/employee=">api/employee</a></p>
+                <p><b>HTTP Request:</b> POST</p>
+                <p><b>Body:</b></p>
+                <p class="param">
+                    <b>@Employee:</b> {"email":"example@mail.com","firstName":"exampleName","lastName":"exampleLastName","phoneNumber":"0701234567","ssn":"199506239912"}.
+                </p>
+                <p><b>Action:</b> inserts a new employee.</p>
+            </div>
+
+            <div class="put">
+                <p><a href="api/employee=">api/employee</a></p>
+                <p><b>HTTP Request:</b> PUT</p>
+                <p><b>Body:</b></p>
+                <p class="param">
+                    <b>@Employee:</b> {"email":"example@mail.com","firstName":"exampleName","lastName":"exampleLastName","phoneNumber":"0701234567","ssn":"199506239912"}.
+                </p>
+                <p><b>Action:</b> deletes an employee.</p>
+            </div>
+
+        </div>
+
+
+        <div class="entity" id="shift">
+            <div class="get">
+                <p><a href="api/shift">api/shift</a></p>
+                <p><b>HTTP Request:</b> GET</p>
+                <p><b>Param:</b></p>
+                <p class="param">
+                    <b>@employeeId(optional):</b> 12 digit social security number (ssn) of a registered employee.</p>
+                <p class="param"><b>@shiftId(optional):</b> id of a shift.</p>
+                <p class="param"><b>@date(optional):</b> a date.</p>
+                <p>
+                    <b>Returns:</b> the parameters can be combined freely, will return shifts based on the combined parameters. For example if @employeeId and @date is set it will return all shifts for an employee on the given date.
+                </p>
+            </div>
+        </div>
+
+
+        <div class="entity" id="request">
+            <div class="card">
+                <p><a href="api/request">api/request</a></p>
+            </div>
+        </div>
+
+
+        <div class="entity" id="orders">
+            <div class="card">
+                <p><a href="api/orders">api/orders</a></p>
+            </div>
+        </div>
+
+
+        <div class="entity" id="booking">
+            <div class="card">
+                <p><a href="api/booking">api/booking</a></p>
+            </div>
+        </div>
+
+
+        <div class="entity" id="dish">
+            <div class="card">
+                <p><a href="api/dish">api/dish</a></p>
+            </div>
+        </div>
+
+
+        <div class="entity" id="carte">
+            <div class="card">
+                <p><a href="api/carte">api/carte</a></p>
+            </div>
+        </div>
+
+
+        <div class="entity" id="lunch">
+            <div class="card">
+                <p><a href="api/lunch">api/lunch</a></p>
+            </div>
+        </div>
+
+
+        <div class="entity" id="event">
+            <div class="card">
+                <p><a href="api/event">api/event</a></p>
+            </div>
+        </div>
+
+
+        <div class="entity" id="review">
+            <div class="card">
+                <p><a href="api/review">api/review</a></p>
+            </div>
+        </div>
+    </div>
 </f:view>
 </html>
