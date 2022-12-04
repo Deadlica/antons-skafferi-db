@@ -27,7 +27,7 @@ public class RequestResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String insertRequest(RequestPlaceholder requestPlaceholder) {
         requestBean.insertRequest(requestPlaceholder.getSsn(), requestPlaceholder.getId());
-        return "hej mange :)";
+        return "ok";
     }
 
     @PUT

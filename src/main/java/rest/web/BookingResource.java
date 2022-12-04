@@ -39,10 +39,10 @@ public class BookingResource {
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("remove")
-    public Booking removeBooking(Booking booking) {
-        return bookingBean.removeBooking(booking);
+    @Produces(MediaType.TEXT_PLAIN)
+    public String removeBooking(Booking booking) {
+        bookingBean.removeBooking(booking);
+        return "ok";
     }
 
     @POST

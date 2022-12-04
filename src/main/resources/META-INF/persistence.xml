@@ -16,6 +16,5 @@
         <class>db.ReviewEntity</class>
         <class>db.RequestEntity</class>
 
-
     </persistence-unit>
 </persistence>

@@ -15,6 +15,7 @@ import rest.entities.Shift;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Named
 @Transactional
@@ -32,17 +33,18 @@ public class EmployeeBean {
         return query.getResultList();
     }
 
-    public List<Employee> getAvailableEmployees(String date) {
-        TypedQuery<Employee> workingEmployeesSsn = em.createQuery("SELECT s.employee.ssn FROM Shift s WHERE s.date = :date", Employee.class);
-        workingEmployeesSsn.setParameter("date", date);
-        List<Employee> employeesWorking = workingEmployeesSsn.getResultList();
-        List<Employee> employeesNotWorking;
+    public List<Employee> getAvailableEmployees(String date, String time) {
+        TypedQuery<Employee> workingEmployees = em.createQuery("SELECT s.employee FROM Shift s WHERE s.date = :date AND s.beginTime = :time", Employee.class);
+        workingEmployees.setParameter("date", date);
+        workingEmployees.setParameter("time", time);
+        List<Employee> employeesWorking = workingEmployees.getResultList();
+
 
         String stringQuery = buildAvailableEmployeesQueryString(employeesWorking);
         TypedQuery<Employee> availableEmployeesQuery = em.createQuery(stringQuery, Employee.class);
 
         for(int index = 0; index < employeesWorking.size(); index++) {
-            availableEmployeesQuery.setParameter("ssn" + index, employeesWorking.get(index));
+            availableEmployeesQuery.setParameter("ssn" + index, employeesWorking.get(index).getSsn());
         }
 
         return availableEmployeesQuery.getResultList();

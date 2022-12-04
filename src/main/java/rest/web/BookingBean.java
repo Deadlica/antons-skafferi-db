@@ -1,23 +1,28 @@
 package rest.web;
 
-import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import rest.entities.Booking;
-import rest.entities.Employee;
 
-import java.awt.print.Book;
-import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 @Named
 @Transactional
 public class BookingBean {
     @PersistenceContext(unitName = "default")
     EntityManager em;
+
+    public BookingBean() {
+        for(int tableNr = 1; tableNr <= 6; tableNr++) {
+            usedTables.put(tableNr, false);
+        }
+    }
 
     public List<Booking> getAllBookings() {
         return em.createQuery("SELECT b FROM Booking b", Booking.class).getResultList();
@@ -42,13 +47,35 @@ public class BookingBean {
         return query.getResultList();
     }
 
-    public Booking removeBooking(Booking booking) {
-        em.remove(booking);
-        return booking;
+    public void removeBooking(Booking booking) {
+        em.remove(em.find(Booking.class, booking.getId()));
     }
 
     public Booking insertBooking(Booking booking) {
-        em.persist(booking);
+        List<Booking> bookings = getBookingOfDate(booking.getDate());
+        if(bookings.size() < 6) {
+            int tableNr = booking.getTableNumber().intValue();
+
+            for(Booking b : bookings) {
+                usedTables.put(b.getTableNumber().intValue(), true);
+            }
+            if(usedTables.get(tableNr) == null || usedTables.get(tableNr)) {
+                tableNr = getAvailableTable();
+                booking.setTableNumber((long) tableNr);
+                em.persist(booking);
+            }
+        }
         return booking;
     }
+
+    private int getAvailableTable() {
+        for(Map.Entry<Integer, Boolean> tableNr : usedTables.entrySet()) {
+            if(!tableNr.getValue()) { //Table number is not occupied
+                return tableNr.getKey();
+            }
+        }
+        return 0;
+    }
+
+    private HashMap<Integer, Boolean> usedTables = new HashMap<Integer, Boolean>();
 }

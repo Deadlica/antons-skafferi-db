@@ -30,14 +30,28 @@ public class EmployeeResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("available")
-    public List<Employee> getAvailableEmployess(@QueryParam("date") String date) {
+    @Path("lunch/available")
+    public List<Employee> getAvailableLunchEmployess(@QueryParam("date") String date) {
+        String time = "11:00:00";
         if(date == null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
             Date today = new Date();
-            return employeeBean.getAvailableEmployees(simpleDateFormat.format(today));
+            return employeeBean.getAvailableEmployees(simpleDateFormat.format(today), time);
         }
-        return employeeBean.getAvailableEmployees(date);
+        return employeeBean.getAvailableEmployees(date, time);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("dinner/available")
+    public List<Employee> getAvailableDinnerEmployess(@QueryParam("date") String date) {
+        String time = "16:00:00";
+        if(date == null) {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Date today = new Date();
+            return employeeBean.getAvailableEmployees(simpleDateFormat.format(today), time);
+        }
+        return employeeBean.getAvailableEmployees(date, time);
     }
 
     @POST

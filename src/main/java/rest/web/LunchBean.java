@@ -30,4 +30,18 @@ public class LunchBean {
         em.persist(lunch);
         return lunch;
     }
+
+    public void deleteLunch(Lunch lunch) {
+        Lunch lunchKey = em.createQuery("SELECT l FROM Lunch l WHERE l.date = :date AND l.dish.id = :id", Lunch.class)
+                        .setParameter("date", lunch.getDate())
+                        .setParameter("id", lunch.getDish().getId())
+                        .getSingleResult();
+        em.remove(lunchKey);
+    }
+
+    public void deleteAllLunchOfDish(int dishId) {
+        int deletedCount = em.createQuery("DELETE FROM Lunch l WHERE l.dish.id = :id", Lunch.class)
+                .setParameter("id", dishId)
+                .executeUpdate();
+    }
 }

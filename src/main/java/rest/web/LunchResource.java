@@ -25,7 +25,7 @@ public class LunchResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Lunch> getAllLunch(@QueryParam("date") String date) {
+    public List<Lunch> getLunch(@QueryParam("date") String date) {
         if(date == null) {
             return lunchBean.getAllLunch();
         }
@@ -45,5 +45,13 @@ public class LunchResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Lunch insertLunch(Lunch lunch) {
         return lunchBean.insertLunch(lunch);
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteLunch(Lunch lunch) {
+        lunchBean.deleteLunch(lunch);
+        return "ok";
     }
 }

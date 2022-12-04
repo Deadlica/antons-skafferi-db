@@ -17,7 +17,7 @@ public class ReviewBean {
     EntityManager em;
 
     public List<Review> getAllReviews() {
-        return em.createQuery("SELECT r FROM Review r", Review.class).getResultList();
+        return em.createQuery("SELECT r FROM Review r ORDER BY r.ranking DESC", Review.class).getResultList();
     }
 
     public Review insertReview(Review review) {
@@ -26,8 +26,14 @@ public class ReviewBean {
     }
 
     public void deleteReview(Review review) {
-        TypedQuery<Review> query = em.createQuery("SELECT r FROM Review r WHERE r.id = :id", Review.class);
-        query.setParameter("id", review.getId());
-        em.remove(query.getSingleResult());
+        Review r = em.find(Review.class, review.getId());
+        em.remove(r);
+    }
+
+    public void deleteAllReview() {
+        List<Review> reviews = em.createQuery("SELECT r FROM Review r", Review.class).getResultList();
+        for(Review r : reviews) {
+            em.remove(r);
+        }
     }
 }

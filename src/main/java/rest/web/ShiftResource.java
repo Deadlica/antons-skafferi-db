@@ -71,7 +71,7 @@ public class ShiftResource {
     @Path("change-employee")
     public void changeShiftEmployee(ShiftUpdateEmployee shiftUpdateEmployee) {
         Shift shift = shiftBean.changeShiftEmployee((long) shiftUpdateEmployee.getId(), shiftUpdateEmployee.getSsn());
-        requestBean.deleteRequests((long) shiftUpdateEmployee.getId());
+        requestBean.deleteRequests((long) shiftUpdateEmployee.getId()); //deletes other requests of the same shift
     }
 
     @POST

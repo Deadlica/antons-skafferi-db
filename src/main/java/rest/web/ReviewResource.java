@@ -32,4 +32,11 @@ public class ReviewResource {
         return "ok";
     }
 
+    @PUT
+    @Path("delete-all")
+    public String deleteAllReview() {
+        reviewBean.deleteAllReview();
+        return "ok";
+    }
+
 }

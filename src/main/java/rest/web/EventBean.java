@@ -20,14 +20,25 @@ public class EventBean {
         return em.createQuery("SELECT e FROM Event e", Event.class).getResultList();
     }
 
+    public List<Event> getUpcomingEvents(String date) {
+        TypedQuery<Event> query = em.createQuery("SELECT e FROM Event e WHERE e.date >= :date", Event.class);
+        query.setParameter("date", date);
+        return query.getResultList();
+    }
+
     public Event insertEvent(Event event) {
         em.persist(event);
         return event;
     }
 
     public void deleteEvent(Event event) {
-        TypedQuery<Event> query = em.createQuery("SELECT e FROM Event e WHERE e.id = :id", Event.class);
-        query.setParameter("id", event.getId());
-        em.remove(query.getSingleResult());
+        em.remove(em.find(Event.class, event.getId()));
+    }
+
+    public void deleteAllEvent() {
+        List<Event> allEvents = em.createQuery("SELECT e FROM Event e", Event.class).getResultList();
+        for(Event e : allEvents) {
+            em.remove(e);
+        }
     }
 }

@@ -1,5 +1,6 @@
 package rest.web;
 
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -26,17 +27,18 @@ public class DishBean {
         return dish;
     }
 
+    @Inject
+    CarteBean carteBean;
+    @Inject
+    LunchBean lunchBean;
     public void deleteDish(int id) {
-        //em.remove(em.find(Dish.class, id));
-        /*TypedQuery<Dish> query = em.createQuery("SELECT d FROM Dish d WHERE d.id = :id", Dish.class);
-        query.setParameter("id", id);
-        em.remove(query.getSingleResult());*/
-        Carte carteItem = em.find(Carte.class, id);
-        Lunch lunchItem = em.find(Lunch.class, id);
-        Dish dishItem = em.find(Dish.class, id);
-        em.remove(carteItem);
-        em.remove(lunchItem);
-        em.remove(dishItem);
+        carteBean.deleteCarte(id);
+        lunchBean.deleteAllLunchOfDish(id);
 
+
+
+        Dish dish = em.createQuery("SELECT d FROM Dish d WHERE d.id = :id", Dish.class).setParameter("id", id).getSingleResult();
+
+        em.remove(dish);
     }
 }

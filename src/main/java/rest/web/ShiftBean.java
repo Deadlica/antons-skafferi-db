@@ -91,8 +91,10 @@ public class ShiftBean {
         shift.setEmployee(employee);
 
         String date = shift.getDate();
-        TypedQuery<Request> query = em.createQuery("SELECT r FROM Request r WHERE r.shift.date = :date AND r.toEmployee.ssn = :ssn", Request.class);
+        String time = shift.getBeginTime();
+        TypedQuery<Request> query = em.createQuery("SELECT r FROM Request r WHERE r.shift.date = :date AND r.shift.beginTime = :time AND r.toEmployee.ssn = :ssn", Request.class);
         query.setParameter("date", date);
+        query.setParameter("time", time);
         query.setParameter("ssn", employeeId);
 
         List<Request> excessRequests = query.getResultList();

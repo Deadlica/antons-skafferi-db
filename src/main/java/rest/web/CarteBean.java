@@ -25,10 +25,9 @@ public class CarteBean {
         return carte;
     }
 
-    public void deleteCarte(int dishID) {
-        TypedQuery<Carte> query = em.createQuery("SELECT c FROM Carte c WHERE c.dish.id = :id", Carte.class);
-        query.setParameter("id", dishID);
-        Carte carte = query.getSingleResult();
-        em.remove(carte);
+    public void deleteCarte(int dishId) {
+        int deleteCount = em.createQuery("DELETE FROM Carte c WHERE c.dish.id = :id", Carte.class)
+                .setParameter("id", dishId)
+                .executeUpdate();
     }
 }

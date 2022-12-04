@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Table(name = "LUNCH")
 public class Lunch implements Serializable {
     @Id
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "dishID", nullable = false)
     private Dish dish;
 

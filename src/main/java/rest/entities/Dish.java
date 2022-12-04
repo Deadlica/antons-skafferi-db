@@ -15,6 +15,9 @@ public class Dish implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "type")
+    private String type;
+
     public int getId() {
         return id;
     }
@@ -29,5 +32,13 @@ public class Dish implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
