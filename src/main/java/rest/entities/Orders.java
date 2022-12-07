@@ -12,7 +12,6 @@ public class Orders implements Serializable {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    //Was originally @OneToMany, changed to @OneToOne, unsure what will be final option
     @OneToOne
     @JoinColumn(name = "dishID", nullable = false)
     private Dish dish;
@@ -30,6 +29,9 @@ public class Orders implements Serializable {
 
     @Column(name = "status", nullable = false)
     private Boolean status;
+
+    @Column(name="served", nullable = false)
+    private Boolean served;
 
     public Long getId() {
         return id;
@@ -77,5 +79,13 @@ public class Orders implements Serializable {
 
     public void setStatus(Boolean status) {
         this.status = status;
+    }
+
+    public Boolean getServed() {
+        return served;
+    }
+
+    public void setServed(Boolean served) {
+        this.served = served;
     }
 }

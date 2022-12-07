@@ -8,8 +8,10 @@ import jakarta.persistence.QueryHint;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.Order;
 import jakarta.transaction.Transactional;
+import rest.entities.Booking;
 import rest.entities.Orders;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 @Named
@@ -29,9 +31,10 @@ public class OrdersBean {
     }
 
     public List<Orders> getReadyOrders(String date) {
-        TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o WHERE o.booking.date = :date AND o.status = :status", Orders.class);
+        TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o WHERE o.booking.date = :date AND o.status = :status AND o.served = :served", Orders.class);
         query.setParameter("date", date);
         query.setParameter("status", true);
+        query.setParameter("served", false);
         return query.getResultList();
     }
 
@@ -40,6 +43,13 @@ public class OrdersBean {
         query.setParameter("category", "Dryck");
         query.setParameter("status", false);
         query.setParameter("date", date);
+        return query.getResultList();
+    }
+
+    public List<Orders> getMonthlyOrders(String startDate, String endDate) {
+        TypedQuery<Orders> query = em.createQuery("SELECT o FROM Orders o WHERE o.booking.date >= :startDate AND o.booking.date <= :endDate", Orders.class);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
         return query.getResultList();
     }
 

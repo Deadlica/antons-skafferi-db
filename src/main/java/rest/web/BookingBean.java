@@ -19,7 +19,7 @@ public class BookingBean {
     EntityManager em;
 
     public BookingBean() {
-        for(int tableNr = 1; tableNr <= 6; tableNr++) {
+        for(int tableNr = 1; tableNr <= totalTables; tableNr++) {
             usedTables.put(tableNr, false);
         }
     }
@@ -53,7 +53,7 @@ public class BookingBean {
 
     public Booking insertBooking(Booking booking) {
         List<Booking> bookings = getBookingOfDate(booking.getDate());
-        if(bookings.size() < 6) {
+        if(bookings.size() < totalTables) {
             int tableNr = booking.getTableNumber().intValue();
 
             for(Booking b : bookings) {
@@ -62,8 +62,8 @@ public class BookingBean {
             if(usedTables.get(tableNr) == null || usedTables.get(tableNr)) {
                 tableNr = getAvailableTable();
                 booking.setTableNumber((long) tableNr);
-                em.persist(booking);
             }
+            em.persist(booking);
         }
         return booking;
     }
@@ -78,4 +78,5 @@ public class BookingBean {
     }
 
     private HashMap<Integer, Boolean> usedTables = new HashMap<Integer, Boolean>();
+    private final int totalTables = 6;
 }

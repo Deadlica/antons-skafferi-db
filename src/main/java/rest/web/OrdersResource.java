@@ -47,6 +47,13 @@ public class OrdersResource {
         return ordersBean.getFoodOrders("2022-12-17");
     }
 
+    @GET
+    @Path("sales")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Orders> getMonthlyOrders(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) {
+        return ordersBean.getMonthlyOrders(startDate, endDate);
+    }
+
     @PUT
     @Path("kitchen")
     @Consumes(MediaType.APPLICATION_JSON)

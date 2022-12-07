@@ -24,6 +24,9 @@ public class OrdersEntity {
     @Basic
     @Column(name = "STATUS")
     private boolean status;
+    @Basic
+    @Column(name = "SERVED")
+    private boolean served;
 
     public int getId() {
         return id;
@@ -73,6 +76,14 @@ public class OrdersEntity {
         this.status = status;
     }
 
+    public boolean isServed() {
+        return served;
+    }
+
+    public void setServed(boolean served) {
+        this.served = served;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -82,6 +93,7 @@ public class OrdersEntity {
 
         if (id != that.id) return false;
         if (status != that.status) return false;
+        if (served != that.served) return false;
         if (dishid != null ? !dishid.equals(that.dishid) : that.dishid != null) return false;
         if (bookingid != null ? !bookingid.equals(that.bookingid) : that.bookingid != null) return false;
         if (employeeid != null ? !employeeid.equals(that.employeeid) : that.employeeid != null) return false;
@@ -98,6 +110,7 @@ public class OrdersEntity {
         result = 31 * result + (employeeid != null ? employeeid.hashCode() : 0);
         result = 31 * result + (notes != null ? notes.hashCode() : 0);
         result = 31 * result + (status ? 1 : 0);
+        result = 31 * result + (served ? 1 : 0);
         return result;
     }
 }
