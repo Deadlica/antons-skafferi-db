@@ -15,7 +15,7 @@ public class Shift implements Serializable {
     private Long id;
     @ManyToOne()
     @JoinColumn(name = "employeeID", nullable = false)
-    private Employee employee;
+    private WorkingEmployees employee;
     @Column(name = "beginTime", nullable = false)
     private String beginTime;
     @Column(name = "endTime", nullable = false)
@@ -29,10 +29,10 @@ public class Shift implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-    public Employee getEmployee() {
+    public WorkingEmployees getEmployee() {
         return employee;
     }
-    public void setEmployee(Employee employee) {
+    public void setEmployee(WorkingEmployees employee) {
         this.employee = employee;
     }
     public String getBeginTime() {

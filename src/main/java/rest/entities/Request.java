@@ -15,7 +15,7 @@ public class Request implements Serializable {
     @Id
     @ManyToOne
     @JoinColumn(name = "toID")
-    Employee toEmployee;
+    WorkingEmployees toEmployee;
 
     public Shift getShift() {
         return shift;
@@ -25,11 +25,11 @@ public class Request implements Serializable {
         this.shift = shift;
     }
 
-    public Employee getToEmployee() {
+    public WorkingEmployees getToEmployee() {
         return toEmployee;
     }
 
-    public void setToEmployee(Employee toEmployee) {
+    public void setToEmployee(WorkingEmployees toEmployee) {
         this.toEmployee = toEmployee;
     }
 }

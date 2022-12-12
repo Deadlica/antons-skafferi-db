@@ -4,6 +4,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import rest.entities.Dish;
+import rest.entities.DishNotInCarte;
 
 import javax.print.attribute.standard.Media;
 import java.util.List;
@@ -17,6 +18,13 @@ public class DishResource {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Dish> getAllDishes() {
         return dishBean.getAllDishes();
+    }
+
+    @GET
+    @Path("available")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<DishNotInCarte> getAvailableDishes() {
+        return dishBean.getAvailableDishes();
     }
 
     @POST

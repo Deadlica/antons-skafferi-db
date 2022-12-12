@@ -16,7 +16,7 @@ public class RequestResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<Request> getAllRequests(@QueryParam("receiverId") String receiverId) {
-        if(receiverId == null) {
+        if(receiverId == null || receiverId.isEmpty()) {
             return requestBean.getAllRequests();
         }
         return requestBean.getRequest(receiverId);

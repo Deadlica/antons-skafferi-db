@@ -2,39 +2,35 @@ package rest.entities;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
-
 @Entity
-@Table(name = "ORDERS")
-public class Orders implements Serializable {
+@Table(name = "COMBINEDORDERS")
+public class CombinedOrders {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
     @OneToOne
     @JoinColumn(name = "dishID", nullable = false)
     private Dish dish;
-
     @ManyToOne
     @JoinColumn(name = "bookingID", nullable = false)
     private Booking booking;
-
     @ManyToOne
     @JoinColumn(name = "employeeID", nullable = false)
     private EmployeeView employee;
-
     @Column(name = "notes")
     private String notes;
-
     @Column(name = "status", nullable = false)
     private Boolean status;
-
-    @Column(name="served", nullable = false)
+    @Column(name = "served", nullable = false)
     private Boolean served;
-
-    @Column(name="time")
+    @Column(name = "time")
     private String time;
+    @Column(name = "price", nullable = false)
+    private Integer price;
+    @Column(name = "category", nullable = false)
+    private String category;
+    @Column(name = "description", nullable = false)
+    private String description;
 
     public Long getId() {
         return id;
@@ -98,5 +94,29 @@ public class Orders implements Serializable {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

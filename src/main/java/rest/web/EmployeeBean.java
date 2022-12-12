@@ -1,21 +1,19 @@
 package rest.web;
 
-import jakarta.enterprise.inject.Typed;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
-import jakarta.validation.constraints.Max;
 import rest.entities.Employee;
-import rest.entities.Request;
-import rest.entities.Shift;
+import rest.entities.EmployeeView;
+import rest.entities.RetiredEmployees;
+import rest.entities.WorkingEmployees;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Named
 @Transactional
@@ -23,25 +21,36 @@ public class EmployeeBean {
     @PersistenceContext(unitName = "default")
     EntityManager em;
 
-    public List<Employee> getAllEmployees() {
-        return em.createQuery("SELECT e FROM Employee e", Employee.class).getResultList();
+    public List<EmployeeView> getAllEmployees() {
+        TypedQuery<EmployeeView> query = em.createQuery("SELECT e FROM EmployeeView e", EmployeeView.class);
+        return query.getResultList();
     }
 
-    public List<Employee> getEmployee(String id) {
-        TypedQuery<Employee> query = em.createQuery("SELECT e FROM Employee e WHERE e.ssn = :id", Employee.class);
+    public List<WorkingEmployees> getWorkingEmployees() {
+        TypedQuery<WorkingEmployees> query = em.createQuery("SELECT w FROM WorkingEmployees w", WorkingEmployees.class);
+        return query.getResultList();
+    }
+
+    public List<RetiredEmployees> getRetiredEmployees() {
+        TypedQuery<RetiredEmployees> query = em.createQuery("SELECT r FROM RetiredEmployees r", RetiredEmployees.class);
+        return query.getResultList();
+    }
+
+    public List<EmployeeView> getEmployee(String id) {
+        TypedQuery<EmployeeView> query = em.createQuery("SELECT w FROM WorkingEmployees w WHERE w.ssn = :id", EmployeeView.class);
         query.setParameter("id", id);
         return query.getResultList();
     }
 
-    public List<Employee> getAvailableEmployees(String date, String time) {
-        TypedQuery<Employee> workingEmployees = em.createQuery("SELECT s.employee FROM Shift s WHERE s.date = :date AND s.beginTime = :time", Employee.class);
+    public List<EmployeeView> getAvailableEmployees(String date, String time) {
+        TypedQuery<EmployeeView> workingEmployees = em.createQuery("SELECT s.employee FROM Shift s WHERE s.date = :date AND s.beginTime = :time", EmployeeView.class);
         workingEmployees.setParameter("date", date);
         workingEmployees.setParameter("time", time);
-        List<Employee> employeesWorking = workingEmployees.getResultList();
+        List<EmployeeView> employeesWorking = workingEmployees.getResultList();
 
 
         String stringQuery = buildAvailableEmployeesQueryString(employeesWorking);
-        TypedQuery<Employee> availableEmployeesQuery = em.createQuery(stringQuery, Employee.class);
+        TypedQuery<EmployeeView> availableEmployeesQuery = em.createQuery(stringQuery, EmployeeView.class);
 
         for(int index = 0; index < employeesWorking.size(); index++) {
             availableEmployeesQuery.setParameter("ssn" + index, employeesWorking.get(index).getSsn());
@@ -51,6 +60,7 @@ public class EmployeeBean {
     }
 
     public Employee insertEmployee(Employee employee) {
+        employee.setWorking(true);
         em.persist(employee);
         return employee;
     }
@@ -62,23 +72,27 @@ public class EmployeeBean {
     public void deleteEmployee(Employee employee) {
         requestBean.deleteRequestsOfEmployee(employee);
         shiftBean.deleteAllShiftsOfEmployee(employee);
-        TypedQuery<Employee> query = em.createQuery("SELECT e FROM Employee e WHERE e.ssn = :ssn", Employee.class);
-        query.setParameter("ssn", employee.getSsn());
-        em.remove(query.getSingleResult());
+        Employee emp = em.find(Employee.class, employee.getSsn());
+        emp.setWorking(false);
     }
 
-    private String buildAvailableEmployeesQueryString(List<Employee> employeesWorking) {
-        StringBuilder availableEmployeesQuery = new StringBuilder("SELECT e FROM Employee e");
+    public void unretireEmployee(Employee employee) {
+        Employee emp = em.find(Employee.class, employee.getSsn());
+        emp.setWorking(true);
+    }
+
+    private String buildAvailableEmployeesQueryString(List<EmployeeView> employeesWorking) {
+        StringBuilder availableEmployeesQuery = new StringBuilder("SELECT w FROM WorkingEmployees w");
         if(!employeesWorking.isEmpty()) {
             availableEmployeesQuery.append(" WHERE ");
         }
         for(int index = 0; index < employeesWorking.size(); index++) {
             String ssnPlaceholder = "ssn" + index;
             if(index < employeesWorking.size() - 1) {
-                availableEmployeesQuery.append("e.ssn <> :" + ssnPlaceholder + " AND ");
+                availableEmployeesQuery.append("w.ssn <> :" + ssnPlaceholder + " AND ");
             }
             else {
-                availableEmployeesQuery.append("e.ssn <> :" + ssnPlaceholder);
+                availableEmployeesQuery.append("w.ssn <> :" + ssnPlaceholder);
             }
         }
         return availableEmployeesQuery.toString();

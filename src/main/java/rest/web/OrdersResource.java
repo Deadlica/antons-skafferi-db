@@ -1,10 +1,10 @@
 package rest.web;
 
 import jakarta.inject.Inject;
-import jakarta.persistence.criteria.Order;
+import jakarta.persistence.TypedQuery;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import rest.entities.Booking;
+import rest.entities.CombinedOrders;
 import rest.entities.Orders;
 
 import java.text.SimpleDateFormat;
@@ -25,7 +25,7 @@ public class OrdersResource {
     @GET
     @Path("booking")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Orders> getOrdersFromBooking(@QueryParam("id") int bookingId) {
+    public List<CombinedOrders> getOrdersFromBooking(@QueryParam("id") int bookingId) {
         return ordersBean.getOrdersFromBooking(bookingId);
     }
 
@@ -41,10 +41,19 @@ public class OrdersResource {
     @GET
     @Path("kitchen")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Orders> getFoodOrders() {
+    public List<CombinedOrders> getFoodOrders() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
-        return ordersBean.getFoodOrders("2022-12-17");
+        return ordersBean.getFoodOrders(simpleDateFormat.format(today));
+    }
+
+    @GET
+    @Path("served")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Orders> getServedOrders() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        return ordersBean.getServedOrders(simpleDateFormat.format(today));
     }
 
     @GET
@@ -60,6 +69,15 @@ public class OrdersResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String changeFoodStatus(Orders order) {
         ordersBean.changeFoodStatus(order);
+        return "Updated";
+    }
+
+    @PUT
+    @Path("served")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String markOrderAsServed(Orders order) {
+        ordersBean.markOrderAsServed(order);
         return "Updated";
     }
 

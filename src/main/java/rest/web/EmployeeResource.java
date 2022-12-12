@@ -1,12 +1,13 @@
 package rest.web;
 
 import jakarta.inject.Inject;
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
+import jakarta.persistence.EntityManager;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import rest.entities.Employee;
+import rest.entities.EmployeeView;
+import rest.entities.RetiredEmployees;
+import rest.entities.WorkingEmployees;
 
 import javax.print.attribute.standard.Media;
 import java.text.SimpleDateFormat;
@@ -20,8 +21,8 @@ public class EmployeeResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Employee> getAllEmployee(@QueryParam("id") String id) {
-        if(id == null) {
+    public List<EmployeeView> getAllEmployee(@QueryParam("id") String id) {
+        if(id == null || id.isEmpty()) {
             return employeeBean.getAllEmployees();
         }
 
@@ -29,9 +30,23 @@ public class EmployeeResource {
     }
 
     @GET
+    @Path("working")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<WorkingEmployees> getWorkingEmployees() {
+        return employeeBean.getWorkingEmployees();
+    }
+
+    @GET
+    @Path("retired")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<RetiredEmployees> getRetiredEmployees() {
+        return employeeBean.getRetiredEmployees();
+    }
+
+    @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("lunch/available")
-    public List<Employee> getAvailableLunchEmployess(@QueryParam("date") String date) {
+    public List<EmployeeView> getAvailableLunchEmployees(@QueryParam("date") String date) {
         String time = "11:00:00";
         if(date == null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -44,7 +59,7 @@ public class EmployeeResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("dinner/available")
-    public List<Employee> getAvailableDinnerEmployess(@QueryParam("date") String date) {
+    public List<EmployeeView> getAvailableDinnerEmployees(@QueryParam("date") String date) {
         String time = "16:00:00";
         if(date == null) {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -65,6 +80,15 @@ public class EmployeeResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String deleteEmployee(Employee employee) {
         employeeBean.deleteEmployee(employee);
+        return "ok";
+    }
+
+    @PUT
+    @Path("unretire")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String unretireEmployee(Employee employee) {
+        employeeBean.unretireEmployee(employee);
         return "ok";
     }
 }

@@ -1,17 +1,13 @@
 package rest.web;
 
-import db.RequestEntity;
 import jakarta.inject.Named;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonObjectBuilder;
 import jakarta.persistence.*;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.QueryParam;
 import rest.entities.Employee;
 import rest.entities.Request;
 import rest.entities.Shift;
+import rest.entities.WorkingEmployees;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 @Named
@@ -50,7 +46,7 @@ public class RequestBean {
     }
 
     public void insertRequest(String ssn, int id) {
-        Employee employee = em.createQuery("SELECT e FROM Employee e WHERE e.ssn = :ssn", Employee.class).setParameter("ssn", ssn).getSingleResult();
+        WorkingEmployees employee = em.createQuery("SELECT w FROM WorkingEmployees w WHERE w.ssn = :ssn", WorkingEmployees.class).setParameter("ssn", ssn).getSingleResult();
         Shift shift = em.createQuery("SELECT s FROM Shift s WHERE s.id = :id", Shift.class).setParameter("id", id).getSingleResult();
         Request request = new Request();
         request.setToEmployee(employee);
@@ -61,12 +57,8 @@ public class RequestBean {
     }
 
     public void deleteRequestsOfEmployee(Employee employee) {
-        TypedQuery<Request> query = em.createQuery("SELECT r FROM Request r WHERE r.shift.employee.ssn = :ssn", Request.class);
-        query.setParameter("ssn", employee.getSsn());
-        List<Request> requestsToBeDeleted = query.getResultList();
-
-        for(Request r: requestsToBeDeleted) {
-            em.remove(r);
-        }
+        int deleteCount = em.createQuery("DELETE FROM Request r WHERE r.shift.employee.ssn = :ssn OR r.toEmployee.ssn = :ssn", Request.class)
+                .setParameter("ssn", employee.getSsn())
+                .executeUpdate();
     }
 }

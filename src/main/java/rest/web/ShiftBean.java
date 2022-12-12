@@ -8,9 +8,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaUpdate;
 import jakarta.persistence.criteria.Expression;
 import jakarta.transaction.Transactional;
-import rest.entities.Employee;
-import rest.entities.Request;
-import rest.entities.Shift;
+import rest.entities.*;
 
 import java.lang.reflect.Type;
 import java.util.List;
@@ -87,7 +85,7 @@ public class ShiftBean {
 
     public Shift changeShiftEmployee(Long shiftId, String employeeId) {
         Shift shift = em.find(Shift.class, shiftId);
-        Employee employee = em.find(Employee.class, employeeId);
+        WorkingEmployees employee = em.find(WorkingEmployees.class, employeeId);
         shift.setEmployee(employee);
 
         String date = shift.getDate();
@@ -111,17 +109,22 @@ public class ShiftBean {
     }
 
     public void deleteShift(Shift shift) {
+        TypedQuery<Request> deleteRequestsOfShift = em.createQuery("DELETE FROM Request r WHERE r.shift.id = :id", Request.class);
+        deleteRequestsOfShift.setParameter("id", shift.getId());
+        deleteRequestsOfShift.executeUpdate();
         TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.id = :id", Shift.class);
         query.setParameter("id", shift.getId());
         em.remove(query.getSingleResult());
     }
 
     public void deleteAllShiftsOfEmployee(Employee employee) {
+        /*int query = em.createQuery("DELETE FROM Shift s WHERE s.employee.ssn = :ssn", Shift.class)
+                .setParameter("ssn", employee.getSsn())
+                .executeUpdate();*/
         TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.employee.ssn = :ssn", Shift.class);
         query.setParameter("ssn", employee.getSsn());
-        List<Shift> shiftsToBeDeleted = query.getResultList();
-
-        for(Shift s: shiftsToBeDeleted) {
+        List<Shift> shifts = query.getResultList();
+        for(Shift s: shifts) {
             em.remove(s);
         }
     }

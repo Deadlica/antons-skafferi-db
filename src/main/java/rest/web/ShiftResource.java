@@ -5,6 +5,7 @@ import jakarta.json.JsonObject;
 import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
+import rest.entities.Orders;
 import rest.entities.Shift;
 
 import java.util.*;
@@ -37,7 +38,7 @@ public class ShiftResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("lunch")
     public List<Shift> getLunchShifts(@QueryParam("date") String date) {
-        if(date == null) {
+        if(date == null || date.isEmpty()) {
             return shiftBean.getAllLunchShifts();
         }
         return shiftBean.getLunchShifts(date);
@@ -47,7 +48,7 @@ public class ShiftResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("dinner")
     public List<Shift> getDinnerShifts(@QueryParam("date") String date) {
-        if(date == null) {
+        if(date == null || date.isEmpty()) {
             return shiftBean.getAllDinnerShifts();
         }
         return shiftBean.getDinnerShifts(date);
@@ -57,10 +58,10 @@ public class ShiftResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("upcoming-shifts")
     public List<Shift> getUpcomingShifts(@QueryParam("id") String id, @QueryParam("date") String date) {
-        if(id != null && date != null) {
+        if(id != null && date != null && !id.isEmpty() && !date.isEmpty()) {
             return shiftBean.getUpcomingShifts(id, date);
         }
-        return null;
+        return new ArrayList<>();
     }
 
     @Inject

@@ -5,7 +5,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import rest.entities.Carte;
 
-import javax.print.attribute.standard.Media;
 import java.util.List;
 
 @Path("/carte")
@@ -29,12 +28,12 @@ public class CarteResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String deleteCarte(dishIdPlacerholder dishIdPlacerholder) {
-        carteBean.deleteCarte(dishIdPlacerholder.getId());
+    public String deleteCarte(DishIdPlaceholder dishIdPlaceholder) {
+        carteBean.deleteCarte(dishIdPlaceholder.getId());
         return "ok";
     }
 
-    public static class dishIdPlacerholder {
+    public static class DishIdPlaceholder {
         private int id;
 
         public int getId() {

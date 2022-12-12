@@ -1,64 +1,130 @@
+@font-face {
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/raleway/v28/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVvaorCIPrEVIT9d0c8.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Raleway-Bold';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url(https://fonts.gstatic.com/s/raleway/v28/1Ptxg8zYS_SKggPN4iEgvnHyvveLxVtzpbCGPrEHJA.woff2) format('woff2');
+    unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
 body {
+    font-family: "Raleway";
+    margin: 0 1%;
+}
+
+b {
+    font-family: "Raleway-Bold";
+    font-size: larger;
 }
 
 .entity {
     display: none;
 }
 
+.param_title {
+    margin-bottom: 0px;
+}
+
 .param {
-    padding-left: 40px;
+    margin-left: 20px;
+    margin-top: 5px;
+    margin-bottom: 2.5px;
 }
 
 .vl {
-    border-left: 3px solid black;
+    /*border-left: 3px solid black;*/
     height: auto;
-    margin: 0px 20px;
+    margin: 0px 0px;
+}
+
+.http_request_get {
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    background: lightgreen;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: solid 1px;
+    border-right: solid 2px;
+}
+
+.http_request_post {
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    background: lightskyblue;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: solid 1px;
+    border-right: solid 2px;
+}
+
+.http_request_put {
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    background: indianred;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border: solid 1px;
+    border-right: solid 2px;
 }
 
 .card_content {
-    margin-left: 50px;
     text-align: left;
+    width: 100%;
     display: flex;
+    margin-left: 20px;
+    margin-right: 20px;
     justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    word-wrap: break-word;
+    overflow: hidden;
 }
 
-.http_request p{
-    margin: 0px;
-}
 
-.get {
+.card {
     display: flex;
     justify-content: flex-start;
-    left: auto;
     margin: 20px auto;
-    width: 40%;
+    width: 60%;
     border-radius: 5px;
     text-align: center;
-    background: lightgreen;
+    background: whitesmoke;
     word-wrap: break-word;
-    padding: 10px;
+    padding: 0px;
 }
 
-.post {
-    margin: 20px auto;
-    width: 70%;
-    text-align: center;
-    background: lightskyblue;
-    word-wrap: break-word;
-    padding: 10px;
-}
-
-.put {
-    margin: 20px auto;
-    width: 70%;
-    text-align: center;
-    background: indianred;
-    word-wrap: break-word;
-    padding: 10px;
-}
-
-.get a:visited, post a:visited, put a:visited {
+.param_title a:visited {
     color: blue;
+}
+
+hr {
+    padding: 0;
+    margin: 0;
+}
+
+.nav_bar {
+    overflow: hidden;
+    background: white;
+    position: sticky;
+    top: 0;
 }
 
 .nav_bar ul {
@@ -75,7 +141,24 @@ body {
 }
 
 @media only screen and (max-width: 600px) {
-    body {
-            background-color: lightblue;
+    .nav_bar ul {
+        display: block;
+        justify-content: space-evenly;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .http_request_get {
+        width: 30%;
+    }
+
+    .http_request_post {
+        width: 30%;
+    }
+
+    .http_request_put {
+        width: 30%;
     }
 }

@@ -8,6 +8,7 @@ import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import rest.entities.Carte;
 import rest.entities.Dish;
+import rest.entities.DishNotInCarte;
 import rest.entities.Lunch;
 
 import java.util.List;
@@ -20,6 +21,10 @@ public class DishBean {
 
     public List<Dish> getAllDishes() {
         return em.createQuery("SELECT d FROM Dish d ORDER BY d.name", Dish.class).getResultList();
+    }
+
+    public List<DishNotInCarte> getAvailableDishes() {
+        return em.createQuery("SELECT d FROM DishNotInCarte d", DishNotInCarte.class).getResultList();
     }
 
     public Dish insertDish(Dish dish) {

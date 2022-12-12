@@ -33,8 +33,11 @@ public class BookingResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("count")
     public String countBookingsOfDate(@QueryParam("date") String date) {
-        int size = bookingBean.getBookingOfDate(date).size();
-        return "{\"size\":" + size + "}";
+        if(date != null || !date.isEmpty()) {
+            int size = bookingBean.getBookingOfDate(date).size();
+            return "{\"size\":" + size + "}";
+        }
+        return "date missing";
     }
 
     @PUT
