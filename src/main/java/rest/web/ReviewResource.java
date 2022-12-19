@@ -38,5 +38,4 @@ public class ReviewResource {
         reviewBean.deleteAllReview();
         return "ok";
     }
-
 }

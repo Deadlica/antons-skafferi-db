@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Entity
+@Cacheable(false)
 @Table(name = "ORDERS")
 public class Orders implements Serializable {
     @Id

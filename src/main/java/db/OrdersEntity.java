@@ -3,6 +3,7 @@ package db;
 import jakarta.persistence.*;
 
 @Entity
+@Cacheable(false)
 @Table(name = "ORDERS", schema = "APP", catalog = "")
 public class OrdersEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

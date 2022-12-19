@@ -76,10 +76,11 @@ public class EmployeeResource {
     }
 
     @PUT
+    @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.TEXT_PLAIN)
-    public String deleteEmployee(Employee employee) {
-        employeeBean.deleteEmployee(employee);
+    public String updateEmployee(Employee employee) {
+        employeeBean.updateEmployee(employee);
         return "ok";
     }
 
@@ -89,6 +90,14 @@ public class EmployeeResource {
     @Produces(MediaType.TEXT_PLAIN)
     public String unretireEmployee(Employee employee) {
         employeeBean.unretireEmployee(employee);
+        return "ok";
+    }
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String deleteEmployee(Employee employee) {
+        employeeBean.deleteEmployee(employee);
         return "ok";
     }
 }

@@ -1,7 +1,9 @@
 package rest.web;
 
+import jakarta.faces.annotation.HeaderValuesMap;
 import jakarta.inject.Inject;
 import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.Order;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import rest.entities.CombinedOrders;
@@ -32,7 +34,7 @@ public class OrdersResource {
     @GET
     @Path("ready")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Orders> getReadyOrders() {
+    public List<CombinedOrders> getReadyOrders() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
         return ordersBean.getReadyOrders(simpleDateFormat.format(today));
@@ -41,10 +43,19 @@ public class OrdersResource {
     @GET
     @Path("kitchen")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<CombinedOrders> getFoodOrders() {
+    public List<CombinedOrders> getKitchenOrders() {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date today = new Date();
-        return ordersBean.getFoodOrders(simpleDateFormat.format(today));
+        return ordersBean.getKitchenOrders(simpleDateFormat.format(today));
+    }
+
+    @GET
+    @Path("kitchen-and-ready")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<CombinedOrders> getKitchenAndReadyOrders() {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date today = new Date();
+        return ordersBean.getAllNotServedOrders(simpleDateFormat.format(today));
     }
 
     @GET
@@ -59,26 +70,35 @@ public class OrdersResource {
     @GET
     @Path("sales")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Orders> getMonthlyOrders(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) {
+    public List<CombinedOrders> getMonthlyOrders(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) {
         return ordersBean.getMonthlyOrders(startDate, endDate);
+    }
+
+    @PUT
+    @Path("update-status-and-served")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Orders updateStatusAndServed(Orders order) {
+        ordersBean.updateStatusAndServed(order);
+        return order;
     }
 
     @PUT
     @Path("kitchen")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String changeFoodStatus(Orders order) {
-        ordersBean.changeFoodStatus(order);
-        return "Updated";
+    @Produces(MediaType.APPLICATION_JSON)
+    public Orders changeStatus(Orders order) {
+        ordersBean.changeStatus(order);
+        return order;
     }
 
     @PUT
     @Path("served")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String markOrderAsServed(Orders order) {
-        ordersBean.markOrderAsServed(order);
-        return "Updated";
+    @Produces(MediaType.APPLICATION_JSON)
+    public Orders changeServed(Orders order) {
+        ordersBean.changeServed(order);
+        return order;
     }
 
     @POST

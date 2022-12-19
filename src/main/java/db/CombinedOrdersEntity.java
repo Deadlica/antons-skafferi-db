@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import java.sql.Time;
 
 @Entity
+@Cacheable(false)
 @Table(name = "COMBINEDORDERS", schema = "APP", catalog = "")
 public class CombinedOrdersEntity {
     @Id

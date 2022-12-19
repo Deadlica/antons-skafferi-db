@@ -112,6 +112,36 @@
             </div>
 
             <div class="card">
+                <div class="http_request_post">
+                    <h1>PUT</h1>
+                </div>
+                <div class="vl" />
+                <div class="card_content">
+                    <p class="param_title"><b>Extension:</b> <a href="api/employee/update">api/employee/update</a></p>
+                    <p class="param_title"><b>Body</b></p>
+                    <p class="param">
+                        <b>@Employee:</b> {"email":"example@mail.com","firstName":"exampleName","lastName":"exampleLastName","phoneNumber":"0701234567","ssn":"199506239912"}.
+                    </p>
+                    <p><b>Action</b><br />Updates employee attributes.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="http_request_post">
+                    <h1>PUT</h1>
+                </div>
+                <div class="vl" />
+                <div class="card_content">
+                    <p class="param_title"><b>Extension:</b> <a href="api/employee/unretire">api/employee/unretire</a></p>
+                    <p class="param_title"><b>Body</b></p>
+                    <p class="param">
+                        <b>@Employee:</b> {"email":"example@mail.com","firstName":"exampleName","lastName":"exampleLastName","phoneNumber":"0701234567","ssn":"199506239912"}.
+                    </p>
+                    <p><b>Action</b><br />Unretires a previously working employee.</p>
+                </div>
+            </div>
+
+            <div class="card">
                 <div class="http_request_put">
                     <h1>PUT</h1>
                 </div>
@@ -123,21 +153,6 @@
                         <b>@Employee:</b> {"email":"example@mail.com","firstName":"exampleName","lastName":"exampleLastName","phoneNumber":"0701234567","ssn":"199506239912"}.
                     </p>
                     <p><b>Action</b><br />Retires an employee, deletes all their shifts and requests.</p>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="http_request_put">
-                    <h1>PUT</h1>
-                </div>
-                <div class="vl" />
-                <div class="card_content">
-                    <p class="param_title"><b>Extension:</b> <a href="api/employee/unretire">api/employee/unretire</a></p>
-                    <p class="param_title"><b>Body</b></p>
-                    <p class="param">
-                        <b>@Employee:</b> {"email":"example@mail.com","firstName":"exampleName","lastName":"exampleLastName","phoneNumber":"0701234567","ssn":"199506239912"}.
-                    </p>
-                    <p><b>Action</b><br />Unretires a previously working employee.</p>
                 </div>
             </div>
 
@@ -352,6 +367,17 @@
                 </div>
                 <div class="vl" />
                 <div class="card_content">
+                    <p class="param_title"><b>Extension:</b> <a href="api/orders/kitchen-and-ready">api/orders/kitchen</a></p>
+                    <p><b>Returns</b><br />All orders of the day that haven't been served yet.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="http_request_get">
+                    <h1>GET</h1>
+                </div>
+                <div class="vl" />
+                <div class="card_content">
                     <p class="param_title"><b>Extension:</b> <a href="api/orders/served">api/orders/served</a></p>
                     <p><b>Returns</b><br />All orders that have been served.</p>
                 </div>
@@ -377,6 +403,19 @@
                 </div>
                 <div class="vl" />
                 <div class="card_content">
+                    <p class="param_title"><b>Extension:</b> <a href="api/orders/update-status-and-served">api/orders/update-status-and-served</a></p>
+                    <p class="param_title"><b>Body</b></p>
+                    <p class="param"><b>@Order:</b> {"booking":{"date":"2022-12-07","firstName":"Sam","id":415,"lastName":"Gre","numberOfPeople":2,"phoneNumber":"321321","tableNumber":2,"time":"14:00:00"},"dish":{"id":246,"name":"Apple Juice"},"employee":{"email":"caku2200@miun.student.se","firstName":"Can","lastName":"Kupeli","phoneNumber":"0768815432","ssn":"199809117632"},"id":206,"notes":"no chicken","served":false,"status":false}.</p>
+                    <p><b>Action</b><br />Changes an orders "status", "served" attributes to True or False.</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="http_request_post">
+                    <h1>PUT</h1>
+                </div>
+                <div class="vl" />
+                <div class="card_content">
                     <p class="param_title"><b>Extension:</b> <a href="api/orders/kitchen">api/orders/kitchen</a></p>
                     <p class="param_title"><b>Body</b></p>
                     <p class="param"><b>@Order:</b> {"booking":{"date":"2022-12-07","firstName":"Sam","id":415,"lastName":"Gre","numberOfPeople":2,"phoneNumber":"321321","tableNumber":2,"time":"14:00:00"},"dish":{"id":246,"name":"Apple Juice"},"employee":{"email":"caku2200@miun.student.se","firstName":"Can","lastName":"Kupeli","phoneNumber":"0768815432","ssn":"199809117632"},"id":206,"notes":"no chicken","served":false,"status":false}.</p>
@@ -393,7 +432,7 @@
                     <p class="param_title"><b>Extension:</b> <a href="api/orders/served">api/orders/served</a></p>
                     <p class="param_title"><b>Body</b></p>
                     <p class="param"><b>@Order:</b> {"booking":{"date":"2022-12-07","firstName":"Sam","id":415,"lastName":"Gre","numberOfPeople":2,"phoneNumber":"321321","tableNumber":2,"time":"14:00:00"},"dish":{"id":246,"name":"Apple Juice"},"employee":{"email":"caku2200@miun.student.se","firstName":"Can","lastName":"Kupeli","phoneNumber":"0768815432","ssn":"199809117632"},"id":206,"notes":"no chicken","served":false,"status":false}.</p>
-                    <p><b>Action</b><br />Sets an orders "served" attribute to True to indicate that an order has been served.</p>
+                    <p><b>Action</b><br />Sets an orders "served" attribute to True or False.</p>
                 </div>
             </div>
 

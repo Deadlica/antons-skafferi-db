@@ -43,20 +43,18 @@ public class EmployeeBean {
     }
 
     public List<EmployeeView> getAvailableEmployees(String date, String time) {
-        TypedQuery<EmployeeView> workingEmployees = em.createQuery("SELECT s.employee FROM Shift s WHERE s.date = :date AND s.beginTime = :time", EmployeeView.class);
-        workingEmployees.setParameter("date", date);
-        workingEmployees.setParameter("time", time);
-        List<EmployeeView> employeesWorking = workingEmployees.getResultList();
+        TypedQuery<EmployeeView> query = em.createQuery("SELECT w FROM WorkingEmployees w WHERE w.ssn NOT IN (SELECT s.employee.ssn FROM Shift s WHERE s.date = :date AND s.beginTime = :time)", EmployeeView.class);
+        query.setParameter("date", date);
+        query.setParameter("time", time);
+        return query.getResultList();
+    }
 
-
-        String stringQuery = buildAvailableEmployeesQueryString(employeesWorking);
-        TypedQuery<EmployeeView> availableEmployeesQuery = em.createQuery(stringQuery, EmployeeView.class);
-
-        for(int index = 0; index < employeesWorking.size(); index++) {
-            availableEmployeesQuery.setParameter("ssn" + index, employeesWorking.get(index).getSsn());
-        }
-
-        return availableEmployeesQuery.getResultList();
+    public void updateEmployee(Employee employee) {
+        Employee employeeItem = em.find(Employee.class, employee.getSsn());
+        employeeItem.setFirstName(employee.getFirstName());
+        employeeItem.setLastName(employee.getLastName());
+        employeeItem.setEmail(employee.getEmail());
+        employeeItem.setPhoneNumber(employee.getPhoneNumber());
     }
 
     public Employee insertEmployee(Employee employee) {
@@ -81,7 +79,7 @@ public class EmployeeBean {
         emp.setWorking(true);
     }
 
-    private String buildAvailableEmployeesQueryString(List<EmployeeView> employeesWorking) {
+    private String buildAvailableEmployeesQueryString(List<WorkingEmployees> employeesWorking) {
         StringBuilder availableEmployeesQuery = new StringBuilder("SELECT w FROM WorkingEmployees w");
         if(!employeesWorking.isEmpty()) {
             availableEmployeesQuery.append(" WHERE ");

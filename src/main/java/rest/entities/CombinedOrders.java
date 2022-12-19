@@ -3,6 +3,7 @@ package rest.entities;
 import jakarta.persistence.*;
 
 @Entity
+@Cacheable(false)
 @Table(name = "COMBINEDORDERS")
 public class CombinedOrders {
     @Id
