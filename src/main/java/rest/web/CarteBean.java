@@ -17,7 +17,7 @@ public class CarteBean {
     EntityManager em;
 
     public List<Carte> getAllCarte() {
-        return em.createQuery("SELECT c FROM Carte c", Carte.class).getResultList();
+        return em.createQuery("SELECT c FROM Carte c ORDER BY c.category, c.dish.type, c.dish.name", Carte.class).getResultList();
     }
 
     public Carte insertCarte(Carte carte) {

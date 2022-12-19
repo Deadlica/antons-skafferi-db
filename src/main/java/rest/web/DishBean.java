@@ -24,7 +24,7 @@ public class DishBean {
     }
 
     public List<DishNotInCarte> getAvailableDishes() {
-        return em.createQuery("SELECT d FROM DishNotInCarte d", DishNotInCarte.class).getResultList();
+        return em.createQuery("SELECT d FROM DishNotInCarte d ORDER BY d.type, d.name", DishNotInCarte.class).getResultList();
     }
 
     public Dish insertDish(Dish dish) {
