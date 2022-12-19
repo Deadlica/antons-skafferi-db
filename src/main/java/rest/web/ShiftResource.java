@@ -64,6 +64,16 @@ public class ShiftResource {
         return new ArrayList<>();
     }
 
+    @GET
+    @Path("range")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Shift> getShiftsBetween(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) {
+        if(startDate == null || endDate == null) {
+            return new ArrayList<>();
+        }
+        return shiftBean.getShiftsBetween(startDate, endDate);
+    }
+
     @Inject
     RequestBean requestBean;
     @PUT

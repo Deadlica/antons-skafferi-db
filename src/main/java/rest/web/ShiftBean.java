@@ -83,6 +83,13 @@ public class ShiftBean {
         return query.getResultList();
     }
 
+    public List<Shift> getShiftsBetween(String startDate, String endDate) {
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.date >= :startDate AND s.date <= :endDate", Shift.class);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+        return query.getResultList();
+    }
+
     public Shift changeShiftEmployee(Long shiftId, String employeeId) {
         Shift shift = em.find(Shift.class, shiftId);
         WorkingEmployees employee = em.find(WorkingEmployees.class, employeeId);
