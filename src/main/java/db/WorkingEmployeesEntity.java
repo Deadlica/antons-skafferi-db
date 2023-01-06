@@ -3,6 +3,7 @@ package db;
 import jakarta.persistence.*;
 
 @Entity
+@Cacheable(false)
 @Table(name = "WORKINGEMPLOYEES", schema = "APP", catalog = "")
 public class WorkingEmployeesEntity {
     @Id
