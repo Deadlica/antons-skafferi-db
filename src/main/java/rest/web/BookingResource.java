@@ -51,7 +51,7 @@ public class BookingResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Booking insertBooking(Booking booking) {
+    public String insertBooking(Booking booking) {
         return bookingBean.insertBooking(booking);
     }
 
