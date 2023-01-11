@@ -62,7 +62,7 @@ public class EventResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.TEXT_PLAIN})
     public String uploadImage(ImageContent imageContent) throws IOException {
-        byte[] imageBytes = Base64.getDecoder().decode(imageContent.imageBytes);
+        byte[] imageBytes = Base64.getDecoder().decode(imageContent.getImageBytes());
         if(eventBean.uploadImage(imageBytes, imageContent.getImageName())) {
             return imageContent.getImageName();
         }
