@@ -9,7 +9,10 @@ import jakarta.servlet.http.Part;
 import jakarta.transaction.Transactional;
 import rest.entities.Event;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 @Named
@@ -44,9 +47,10 @@ public class EventBean {
         }
     }
 
-    public boolean uploadImage(Part image) throws IOException {
+    public boolean uploadImage(byte[] imageBytes) throws IOException {
         try {
-            image.write("/home/samuel/IdeaProjects/antons-skafferi/src/main/webapp/resources/images");
+            File imageFile = new File("/home/samuel/Documents/image.jpg");
+            Files.write(imageFile.toPath(), imageBytes);
             return true;
         } catch (IOException e) {
             return false;
