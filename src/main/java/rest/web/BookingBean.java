@@ -51,7 +51,7 @@ public class BookingBean {
         em.remove(em.find(Booking.class, booking.getId()));
     }
 
-    public String insertBooking(Booking booking) {
+    public Booking insertBooking(Booking booking) {
         String response = "Bookings are full!";
         List<Booking> bookings = getBookingOfDate(booking.getDate());
         if(bookings.size() < totalTables) {
@@ -67,7 +67,8 @@ public class BookingBean {
             em.persist(booking);
             response = "Booking has been made!";
         }
-        return response;
+        booking.setFirstName(response);
+        return booking;
     }
 
     private int getAvailableTable() {
