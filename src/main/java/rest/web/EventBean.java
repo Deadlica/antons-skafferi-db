@@ -49,7 +49,7 @@ public class EventBean {
 
     public boolean uploadImage(byte[] imageBytes) throws IOException {
         try {
-            File imageFile = new File("../../../resources/images");
+            File imageFile = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/resources/images/image.jpg");
             Files.write(imageFile.toPath(), imageBytes);
             return true;
         } catch (IOException e) {
