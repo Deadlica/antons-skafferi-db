@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
@@ -61,7 +62,8 @@ public class EventResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.TEXT_PLAIN})
     public String uploadImage(ImageContent imageContent) throws IOException {
-        if(eventBean.uploadImage(imageContent.getImageBytes(), imageContent.getImageName())) {
+        byte[] imageBytes = Base64.getDecoder().decode(imageContent.imageBytes);
+        if(eventBean.uploadImage(imageBytes, imageContent.getImageName())) {
             return imageContent.getImageName();
         }
         return "Failed to upload image";
@@ -70,19 +72,19 @@ public class EventResource {
     @GET
     @Path("image")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public byte[] getImage() throws IOException {
-        return eventBean.getImage();
+    public byte[] getImage(@QueryParam("fileName") String fileName) throws IOException {
+        return eventBean.getImage(fileName);
     }
 
     public static class ImageContent {
-        private byte[] imageBytes;
+        private String imageBytes;
         private String imageName;
 
-        public byte[] getImageBytes() {
+        public String getImageBytes() {
             return imageBytes;
         }
 
-        public void setImageBytes(byte[] imageBytes) {
+        public void setImageBytes(String imageBytes) {
             this.imageBytes = imageBytes;
         }
 

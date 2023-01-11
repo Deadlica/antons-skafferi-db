@@ -55,8 +55,8 @@ public class EventBean {
         }
     }
 
-    public byte[] getImage() throws IOException {
-        File file = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/webapp/resources/event-images/image.jpg");
+    public byte[] getImage(String fileName) throws IOException {
+        File file = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/webapp/resources/event-images/" + fileName);
         byte[] bytes = new byte[(int) file.length()];
         FileInputStream fis = new FileInputStream(file);
         fis.read(bytes);
