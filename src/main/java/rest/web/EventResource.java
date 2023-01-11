@@ -76,6 +76,17 @@ public class EventResource {
         return eventBean.getImage(fileName);
     }
 
+    @PUT
+    @Path("image")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String removeImage(String fileName) {
+        if(eventBean.removeImage(fileName)) {
+            return "Image successfully deleted!";
+        }
+        return "Image not found";
+    }
+
     public static class ImageContent {
         private String imageBytes;
         private String imageName;

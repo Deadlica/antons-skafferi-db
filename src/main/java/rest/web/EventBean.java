@@ -63,4 +63,13 @@ public class EventBean {
         fis.close();
         return bytes;
     }
+
+    public boolean removeImage(String fileName) {
+        File deleteImage = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/webapp/resources/event-images/" + fileName);
+        if(deleteImage.exists()) {
+            deleteImage.delete();
+            return true;
+        }
+        return false;
+    }
 }
