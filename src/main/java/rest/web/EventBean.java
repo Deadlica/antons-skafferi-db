@@ -9,9 +9,7 @@ import jakarta.servlet.http.Part;
 import jakarta.transaction.Transactional;
 import rest.entities.Event;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.util.List;
 
@@ -55,5 +53,14 @@ public class EventBean {
         } catch (IOException e) {
             return false;
         }
+    }
+
+    public byte[] getImage() throws IOException {
+        File file = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/webapp/resources/event-images/image.jpg");
+        byte[] bytes = new byte[(int) file.length()];
+        FileInputStream fis = new FileInputStream(file);
+        fis.read(bytes);
+        fis.close();
+        return bytes;
     }
 }

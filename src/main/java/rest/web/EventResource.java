@@ -66,4 +66,11 @@ public class EventResource {
         }
         return "Failed to upload image";
     }
+
+    @GET
+    @Path("image")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public byte[] getImage() throws IOException {
+        return eventBean.getImage();
+    }
 }
