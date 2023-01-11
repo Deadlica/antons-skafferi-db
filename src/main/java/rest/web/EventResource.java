@@ -58,11 +58,11 @@ public class EventResource {
 
     @POST
     @Path("upload")
-    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
-    @Produces(MediaType.TEXT_PLAIN)
-    public String uploadImage(byte[] imageBytes) throws IOException {
+    @Consumes({MediaType.APPLICATION_OCTET_STREAM, MediaType.TEXT_PLAIN})
+    @Produces({MediaType.TEXT_PLAIN})
+    public String uploadImage(byte[] imageBytes, String filename) throws IOException {
         if(eventBean.uploadImage(imageBytes)) {
-            return "Image uploaded";
+            return filename;
         }
         return "Failed to upload image";
     }
