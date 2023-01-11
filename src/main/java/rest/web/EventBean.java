@@ -45,9 +45,9 @@ public class EventBean {
         }
     }
 
-    public boolean uploadImage(byte[] imageBytes) throws IOException {
+    public boolean uploadImage(byte[] imageBytes, String imageName) throws IOException {
         try {
-            File imageFile = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/webapp/resources/event-images/image.jpg");
+            File imageFile = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/webapp/resources/event-images/" + imageName);
             Files.write(imageFile.toPath(), imageBytes);
             return true;
         } catch (IOException e) {
