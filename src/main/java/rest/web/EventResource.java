@@ -58,7 +58,7 @@ public class EventResource {
 
     @POST
     @Path("upload")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_OCTET_STREAM)
     @Produces(MediaType.TEXT_PLAIN)
     public String uploadImage(byte[] imageBytes) throws IOException {
         if(eventBean.uploadImage(imageBytes)) {
