@@ -1,10 +1,12 @@
 package rest.web;
 
 import jakarta.inject.Inject;
+import jakarta.servlet.http.Part;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import rest.entities.Event;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -49,5 +51,16 @@ public class EventResource {
     public String deleteAllEvent() {
         eventBean.deleteAllEvent();
         return "ok";
+    }
+
+    @POST
+    @Path("upload")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
+    public String uploadImage(Part image) throws IOException {
+        if(eventBean.uploadImage(image)) {
+            return "Image uploaded";
+        }
+        return "Failed to upload image";
     }
 }

@@ -5,9 +5,11 @@ import jakarta.inject.Named;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
+import jakarta.servlet.http.Part;
 import jakarta.transaction.Transactional;
 import rest.entities.Event;
 
+import java.io.IOException;
 import java.util.List;
 
 @Named
@@ -39,6 +41,15 @@ public class EventBean {
         List<Event> allEvents = em.createQuery("SELECT e FROM Event e", Event.class).getResultList();
         for(Event e : allEvents) {
             em.remove(e);
+        }
+    }
+
+    public boolean uploadImage(Part image) throws IOException {
+        try {
+            image.write("/home/samuel/IdeaProjects/antons-skafferi/src/main/webapp/resources/images");
+            return true;
+        } catch (IOException e) {
+            return false;
         }
     }
 }
