@@ -67,7 +67,7 @@ public class BookingBean {
             em.persist(booking);
             response = "Booking has been made!";
         }
-        Booking returnBooking = booking;
+        Booking returnBooking = new Booking();
         returnBooking.setFirstName(response);
         return returnBooking;
     }
