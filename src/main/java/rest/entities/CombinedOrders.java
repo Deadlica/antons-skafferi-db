@@ -11,7 +11,7 @@ public class CombinedOrders {
     private Long id;
     @OneToOne
     @JoinColumn(name = "dishID", nullable = false)
-    private Dish dish;
+    private DishView dish;
     @ManyToOne
     @JoinColumn(name = "bookingID", nullable = false)
     private Booking booking;
@@ -41,11 +41,11 @@ public class CombinedOrders {
         this.id = id;
     }
 
-    public Dish getDish() {
+    public DishView getDish() {
         return dish;
     }
 
-    public void setDish(Dish dish) {
+    public void setDish(DishView dish) {
         this.dish = dish;
     }
 

@@ -3,8 +3,8 @@ package db;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "DISHNOTINCARTE", schema = "APP", catalog = "")
-public class DishNotInCarteEntity {
+@Table(name = "DISHVIEW", schema = "APP", catalog = "")
+public class DishViewEntity {
     @Id
     @Basic
     @Column(name = "ID")
@@ -45,7 +45,7 @@ public class DishNotInCarteEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DishNotInCarteEntity that = (DishNotInCarteEntity) o;
+        DishViewEntity that = (DishViewEntity) o;
 
         if (id != that.id) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;

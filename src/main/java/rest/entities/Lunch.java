@@ -10,7 +10,7 @@ public class Lunch implements Serializable {
     @Id
     @ManyToOne
     @JoinColumn(name = "dishID", nullable = false)
-    private Dish dish;
+    private DishView dish;
 
     @Column(name = "price", nullable = false)
     private Long price;
@@ -22,11 +22,11 @@ public class Lunch implements Serializable {
     @Column(name = "description", nullable = false)
     private String description;
 
-    public Dish getDish() {
+    public DishView getDish() {
         return dish;
     }
 
-    public void setDish(Dish dish) {
+    public void setDish(DishView dish) {
         this.dish = dish;
     }
 

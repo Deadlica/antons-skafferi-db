@@ -20,6 +20,8 @@
         <class>db.EmployeeViewEntity</class>
         <class>db.CombinedOrdersEntity</class>
         <class>db.DishNotInCarteEntity</class>
+        <class>db.DishViewEntity</class>
+        <class>db.DeletedDishViewEntity</class>
         <shared-cache-mode>DISABLE_SELECTIVE</shared-cache-mode>
     </persistence-unit>
 </persistence>

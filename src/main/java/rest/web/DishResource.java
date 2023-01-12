@@ -5,6 +5,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import rest.entities.Dish;
 import rest.entities.DishNotInCarte;
+import rest.entities.DishView;
 
 import javax.print.attribute.standard.Media;
 import java.util.List;
@@ -16,7 +17,7 @@ public class DishResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Dish> getAllDishes() {
+    public List<DishView> getAllDishes() {
         return dishBean.getAllDishes();
     }
 

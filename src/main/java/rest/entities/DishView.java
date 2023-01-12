@@ -1,14 +1,15 @@
 package rest.entities;
 
-import jakarta.persistence.*;
-
-import java.io.Serializable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "DISH")
-public class Dish implements Serializable {
+@Table(name = "DISHVIEW")
+public class DishView {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
@@ -17,9 +18,6 @@ public class Dish implements Serializable {
 
     @Column(name = "type")
     private String type;
-
-    @Column(name = "deleted")
-    private boolean deleted;
 
     public int getId() {
         return id;
@@ -43,13 +41,5 @@ public class Dish implements Serializable {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 }
