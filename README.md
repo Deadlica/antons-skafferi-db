@@ -4,7 +4,7 @@ REST backend for the "Antons Skafferi" restaurant system. Built with Jakarta EE 
 
 ## Clients
 The API serves four clients:
-- [`antons-skafferi`](../antons-skafferi) — JSF web frontend (public site + admin)
+- [`antons-skafferi`](https://github.com/deadlica/antons-skafferi) — JSF web frontend (public site + admin)
 - [Schedule app](https://github.com/angelicaengstrom/dt142-scheduleapp) — Android app for employees to view their shifts
 - [Waiter app](https://github.com/miun-jvig/DT142G.Projekt.Servitor) — Android app for waiters to take and deliver orders
 - [Kitchen app](https://github.com/miun-jvig/DT142G.Projekt.Kok) — Android app for chefs to receive orders and mark them done
