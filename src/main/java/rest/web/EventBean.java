@@ -11,11 +11,23 @@ import rest.entities.Event;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Named
 @Transactional
 public class EventBean {
+    private static final Path IMAGE_DIR = resolveImageDir();
+
+    private static Path resolveImageDir() {
+        String dir = System.getenv("EVENT_IMAGE_DIR");
+        if (dir == null || dir.isBlank()) dir = "/var/skafferi/event-images";
+        Path p = Paths.get(dir);
+        try { Files.createDirectories(p); } catch (IOException ignored) {}
+        return p;
+    }
+
     @PersistenceContext(unitName = "default")
     EntityManager em;
 
@@ -47,8 +59,7 @@ public class EventBean {
 
     public boolean uploadImage(byte[] imageBytes, String imageName) throws IOException {
         try {
-            File imageFile = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/webapp/resources/event-images/" + imageName);
-            Files.write(imageFile.toPath(), imageBytes);
+            Files.write(IMAGE_DIR.resolve(imageName), imageBytes);
             return true;
         } catch (IOException e) {
             return false;
@@ -56,20 +67,16 @@ public class EventBean {
     }
 
     public byte[] getImage(String fileName) throws IOException {
-        File file = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/webapp/resources/event-images/" + fileName);
-        byte[] bytes = new byte[(int) file.length()];
-        FileInputStream fis = new FileInputStream(file);
-        fis.read(bytes);
-        fis.close();
-        return bytes;
+        Path file = IMAGE_DIR.resolve(fileName);
+        if (!Files.exists(file)) return new byte[0];
+        return Files.readAllBytes(file);
     }
 
     public boolean removeImage(String fileName) {
-        File deleteImage = new File("/home/samuel/IdeaProjects/antons-skafferi-db/src/main/webapp/resources/event-images/" + fileName);
-        if(deleteImage.exists()) {
-            deleteImage.delete();
-            return true;
+        try {
+            return Files.deleteIfExists(IMAGE_DIR.resolve(fileName));
+        } catch (IOException e) {
+            return false;
         }
-        return false;
     }
 }

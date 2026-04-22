@@ -1,0 +1,3 @@
+create-jdbc-connection-pool --datasourceclassname=org.apache.derby.jdbc.ClientDataSource --restype=javax.sql.DataSource --property=serverName=localhost:portNumber=1527:databaseName=AntonsSkafferiDB:User=APP:Password=APP DerbyPool
+create-jdbc-resource --connectionpoolid=DerbyPool __derby
+deploy --contextroot=/antons-skafferi-db --name=antons-skafferi-db /opt/payara/apps/antons-skafferi-db.war

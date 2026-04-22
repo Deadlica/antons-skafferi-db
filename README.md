@@ -1,94 +1,126 @@
 # Antons Skafferi Database
-This is a server application for a restaurant built with the Jakarta framework with a local database connected to a derby pool which mapped to Java persistence units. The application also has a RESTful API which allows communications with the database. There is also a webpage with documentation for all the resources of the REST application. This server is used to fulfill requests for a webpage client, as well as 3 different androids apps. It handles the restaurants registrered employees, their shifts, as well as food menus, sales and bookings.
+
+REST backend for the "Antons Skafferi" restaurant system. Built with Jakarta EE (JAX-RS) on Payara Server 6 and an embedded Apache Derby database. JPA entities map to the Derby schema. The service exposes a JSON API only; no UI pages are bundled.
+
+## Clients
+The API serves four clients:
+- [`antons-skafferi`](../antons-skafferi) — JSF web frontend (public site + admin)
+- [Schedule app](https://github.com/angelicaengstrom/dt142-scheduleapp) — Android app for employees to view their shifts
+- [Waiter app](https://github.com/miun-jvig/DT142G.Projekt.Servitor) — Android app for waiters to take and deliver orders
+- [Kitchen app](https://github.com/miun-jvig/DT142G.Projekt.Kok) — Android app for chefs to receive orders and mark them done
+
+## What it does
+Exposes REST endpoints for everything the restaurant runs on: staff, their shifts, table bookings, lunch and dinner menus, dishes, orders, events, and customer reviews. Writes go through validation so the clients can't corrupt the data (invalid dates, duplicate shifts, malformed personnummer etc. are rejected).
+
+Event images are stored on the filesystem. Derby data is seeded from `AntonsSkafferiDB.zip` on first start, so a fresh deploy comes up with usable sample data.
+
+## Endpoints
+See the frontend's [`api-docs/index.xhtml`](https://github.com/Deadlica/antons-skafferi/blob/master/src/main/webapp/api-docs/index.xhtml) for the current reference, and [`samples.html`](https://github.com/Deadlica/antons-skafferi/blob/master/src/main/webapp/api-docs/samples.html) for example payloads. When the frontend is running, the same pages are served at `/api-docs/`.
 
 ---
 
-# Setup
+# Running
+
+The easiest path is Docker. For IDE-based development, see "Development" below.
+
+## Option A: Pull the prebuilt image
+
+```bash
+docker run -d --name antons-skafferi-db \
+  -p 8080:8080 \
+  -v skafferi-derby:/var/skafferi/derby \
+  -v skafferi-images:/var/skafferi/event-images \
+  deadlica/antons-skafferi-db:latest
+```
+
+Verify:
+```bash
+curl http://localhost:8080/antons-skafferi-db/api/employee
+```
+
+## Option B: Build from source
+
+```bash
+git clone https://github.com/deadlica/antons-skafferi-db.git
+cd antons-skafferi-db
+docker build -t antons-skafferi-db .
+docker run -d --name antons-skafferi-db \
+  -p 8080:8080 \
+  -v skafferi-derby:/var/skafferi/derby \
+  -v skafferi-images:/var/skafferi/event-images \
+  antons-skafferi-db
+```
+
+On first start the container:
+1. Unpacks `AntonsSkafferiDB.zip` into the `derby` volume.
+2. Applies views via `init-views.sql`.
+3. Registers the `__derby` JDBC resource via `post-boot-commands.asadmin`.
+4. Deploys the WAR and starts serving on port 8080.
+
+## Configuration
+
+Environment variables:
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `EVENT_IMAGE_DIR` | `/var/skafferi/event-images` | Host directory for uploaded event images |
+
+Volumes (in-container paths):
+- `/var/skafferi/derby` — Derby database files (seeded on first boot)
+- `/var/skafferi/event-images` — uploaded event images
+
+## Resetting the database
+
+```bash
+docker stop antons-skafferi-db && docker rm antons-skafferi-db
+docker volume rm skafferi-derby
+# then re-run the run command
+```
+
+---
+
+# Development
+
+For iterating on code with a local JDK and IDE.
+
 ## Requirements
-* Jetbrains IntelliJ
-* Eclipse GlassFish 6.2.5
-* Jakarta EE 9.1 (Platform or Web Profile works)
-* Java Development Kit 17.0.5
-* Apache Derby drivers (can be installed through IntelliJ)
+- JDK 17
+- Maven 3.9+
+- IntelliJ IDEA (or any Jakarta-aware IDE)
+- Payara Server Full 6
+
+## Build the WAR
+
+```bash
+./mvnw -DskipTests package
+# produces target/antons-skafferi-db-1.0-SNAPSHOT.war
+```
+
+## Run with Docker (rebuild after code changes)
+
+```bash
+docker build -t antons-skafferi-db .
+docker stop antons-skafferi-db 2>/dev/null; docker rm antons-skafferi-db 2>/dev/null
+docker run -d --name antons-skafferi-db -p 8080:8080 \
+  -v skafferi-derby:/var/skafferi/derby \
+  -v skafferi-images:/var/skafferi/event-images \
+  antons-skafferi-db
+```
+
+## Project layout
+- `src/main/java/db/` — JPA entities
+- `src/main/java/rest/entities/` — DTO/JPA entities used by the REST layer
+- `src/main/java/rest/web/` — JAX-RS resources (`*Resource.java`) and business logic beans (`*Bean.java`)
+- `src/main/webapp/` — WAR root
+- `Dockerfile`, `start.sh`, `init-views.sql`, `post-boot-commands.asadmin` — image build + first-boot bootstrap
+
+## Prebuilt images
+Published on Docker Hub as `deadlica/antons-skafferi-db:latest` and `:v2`.
+
 ---
-### Installing GlassFish 6.2.5
-All that's required is to extract the files, by default there will be a domain called "domain1". To check that it's working, navigate to the bin folder and try starting the domain with "asadmin"
-```bash
-cd glassfish6/glassfish/bin
-./asadmin start-domain domain1
-```
-Once glassfish has been successfully launched, go ahead and close it again.
-```bash
-./asadmin stop-domain domain1
-```
----
-### Setup configuration in IntelliJ
-1. Open up the project in IntelliJ
-2. Open up the "Select Run/Debug Configuration" dropdown menu in the top right corner, click "Edit Configurations...".
-3. Click the "+" symbol in the top left corner, select GlassFish Server -> Local.
-4. Select GlassFish 6.2.5 as the Application server by browsing to the installation folder.
-5. Select domain1 as the Server Domain
-6. Add the domains Username and Password. By default, Username is "admin" and there is no password.
 
-Once done it should look something like this.
-
-![](src/main/resources/images/glassfish_configurations.png)
-
-7. Next up, click the "Deployment" tab. Click the "+" then "Artifact..." and lastly "antons-skafferi-db:war"
-8. If there are any other errors that shows up, clicking the "Fix" button should resolve it.
----
-### Setup connection pool and connection resource
-1. Go back to the terminal and navigate to the glassfish bin folder and start the domain.
-```bash
-./asadmin start-domain domain1 
-```
-2. open a web browser and enter the url "localhost:4848" (if you have added a password to domain1 you will be prompted to log in)
-3. In "Common Tasks" to the left, navigate to Resources -> JDBC -> JDBC Connection Pools and click the button "New...".
-4. Fill in any name in the "Pool Name" input
-5. Select "javax.sql.DataSource" as the Resource Type and then click next
-6. In the Datasource Classname input, enter "org.apache.derby.jdbc.ClientDataSource" in the input and click finish.
-7. Go back to the pool that was just created by clicking on its name, click on the tab "Additional Properties"
-8. Add the following properties:
-![](src/main/resources/images/connection_pool_properties.png)
-The "PortNumber" value should be 1527 but to double-check it, in your terminal in the glassfish bin directory type:
-```bash
-./asadmin start-database
-```
-to see which port is used to host the database. Once the properties have been filled out press Save.
-9. Next, head over to "JDBC Resources" and click "New..."
-10. enter "__derby" as the JNDI Name, and select the Pool Name of the JDBC Connection Pool that was just created.
-11. You can now close the glassfish admin page and stop the glassfish domain.
-```bash
-./asadmin stop-domain domain1
-```
----
-### Setup data source for the database in IntelliJ
-1. Head on over to IntelliJ and click on View -> Tool Windows -> Database
-2. There should be an item there called "db", right click it and select "properties".
-3. Fill in the Username, Password fields, they should be the same ones that were added as properties in the connection pool (in this example its APP and APP).
-4. Select how long to save the database credentials.
-5. There should be a "missing driver files" warning at the bottom, click the Download button.
-6. Click the "Test Connection" and it should respond with a "Succeeded" notification.
-7. Turn off the database:
-```bash
-./asadmin stop-database
-```
-8. Extract "AntonsSkafferiDB.zip" that is found in the project folder. Navigate to glassfish6/glassfish/databases/ and replace the folder "AntonsSkafferiDB" with the one that was just extracted.
-9. Turn on the database again:
-```bash
-./asadmin start-database
-```
-10. In the Database view in IntelliJ, right click on db and select "Refresh". All views and tables from the database should be visible now.
-11. Start the server by running the glassfish configuration.
-
-Everything should now be working :)
-
-## UML Diagram
+## UML diagram
 ![](src/main/resources/images/db_uml.png)
 
----
-
-## ER Diagram
+## ER diagram
 ![](src/main/resources/images/antons-skafferi.drawio.png)
-
----

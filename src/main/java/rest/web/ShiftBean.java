@@ -50,28 +50,28 @@ public class ShiftBean {
     }
 
     public List<Shift> getAllLunchShifts() {
-        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.beginTime = :beginTime", Shift.class);
-        query.setParameter("beginTime", "11:00:00");
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.beginTime < :cutoff", Shift.class);
+        query.setParameter("cutoff", "16:00:00");
         return query.getResultList();
     }
 
     public List<Shift> getLunchShifts(String date) {
-        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.date = :date AND s.beginTime = :beginTime", Shift.class);
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.date = :date AND s.beginTime < :cutoff", Shift.class);
         query.setParameter("date", date);
-        query.setParameter("beginTime", "11:00:00");
+        query.setParameter("cutoff", "16:00:00");
         return query.getResultList();
     }
 
     public List<Shift> getAllDinnerShifts() {
-        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.beginTime <> :beginTime", Shift.class);
-        query.setParameter("beginTime", "11:00:00");
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.beginTime >= :cutoff", Shift.class);
+        query.setParameter("cutoff", "16:00:00");
         return query.getResultList();
     }
 
     public List<Shift> getDinnerShifts(String date) {
-        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.date = :date AND s.beginTime <> :beginTime", Shift.class);
+        TypedQuery<Shift> query = em.createQuery("SELECT s FROM Shift s WHERE s.date = :date AND s.beginTime >= :cutoff", Shift.class);
         query.setParameter("date", date);
-        query.setParameter("beginTime", "11:00:00");
+        query.setParameter("cutoff", "16:00:00");
         return query.getResultList();
 
     }
@@ -111,8 +111,41 @@ public class ShiftBean {
     }
 
     public Shift insertShift(Shift shift) {
+        if (shift.getDate() == null || !shift.getDate().matches("\\d{4}-\\d{2}-\\d{2}")) {
+            throw new jakarta.ws.rs.BadRequestException("Invalid date format (expected YYYY-MM-DD)");
+        }
+        try { java.time.LocalDate.parse(shift.getDate()); } catch (Exception e) {
+            throw new jakarta.ws.rs.BadRequestException("Invalid date");
+        }
+        if (!isValidTime(shift.getBeginTime()) || !isValidTime(shift.getEndTime())) {
+            throw new jakarta.ws.rs.BadRequestException("Invalid time format (expected HH:MM:SS)");
+        }
+        if (shift.getBeginTime().compareTo("16:00:00") < 0) {
+            java.time.DayOfWeek dow = java.time.LocalDate.parse(shift.getDate()).getDayOfWeek();
+            if (dow == java.time.DayOfWeek.SATURDAY || dow == java.time.DayOfWeek.SUNDAY) {
+                throw new jakarta.ws.rs.BadRequestException("Lunch shifts are not allowed on weekends");
+            }
+        }
+        if (shift.getEmployee() != null && shift.getEmployee().getSsn() != null) {
+            WorkingEmployees managed = em.find(WorkingEmployees.class, shift.getEmployee().getSsn());
+            if (managed == null) throw new jakarta.ws.rs.BadRequestException("Unknown employee");
+            shift.setEmployee(managed);
+            Long dup = em.createQuery(
+                    "SELECT COUNT(s) FROM Shift s WHERE s.employee.ssn = :ssn AND s.date = :date AND s.beginTime = :begin",
+                    Long.class)
+                    .setParameter("ssn", managed.getSsn())
+                    .setParameter("date", shift.getDate())
+                    .setParameter("begin", shift.getBeginTime())
+                    .getSingleResult();
+            if (dup > 0) throw new jakarta.ws.rs.BadRequestException("Employee already has a shift at this time");
+        }
         em.persist(shift);
         return shift;
+    }
+
+    private static boolean isValidTime(String t) {
+        if (t == null || !t.matches("\\d{2}:\\d{2}:\\d{2}")) return false;
+        try { java.time.LocalTime.parse(t); return true; } catch (Exception e) { return false; }
     }
 
     public void deleteShift(Shift shift) {

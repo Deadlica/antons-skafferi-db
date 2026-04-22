@@ -58,9 +58,29 @@ public class EmployeeBean {
     }
 
     public Employee insertEmployee(Employee employee) {
+        if (!isValidSSN(employee.getSsn())) {
+            throw new jakarta.ws.rs.BadRequestException("Invalid SSN (expected YYYYMMDDXXXX with valid date and Luhn check)");
+        }
         employee.setWorking(true);
         em.persist(employee);
         return employee;
+    }
+
+    static boolean isValidSSN(String ssn) {
+        if (ssn == null || !ssn.matches("\\d{12}")) return false;
+        try {
+            java.time.LocalDate.of(Integer.parseInt(ssn.substring(0, 4)),
+                    Integer.parseInt(ssn.substring(4, 6)),
+                    Integer.parseInt(ssn.substring(6, 8)));
+        } catch (Exception e) { return false; }
+        String last10 = ssn.substring(2);
+        int sum = 0;
+        for (int i = 0; i < 10; i++) {
+            int d = last10.charAt(i) - '0';
+            if (i % 2 == 0) { d *= 2; if (d > 9) d -= 9; }
+            sum += d;
+        }
+        return sum % 10 == 0;
     }
 
     @Inject
